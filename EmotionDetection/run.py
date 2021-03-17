@@ -14,19 +14,12 @@ from tensorflow.keras.layers import MaxPooling2D
 import os
 import sys
 import subprocess
+from datetime import datetime
+
+from ringbuffer import RingBuffer
 
 if sys.platform == 'linux':
     from gpiozero import CPUTemperature
-
-# input arg parsing
-parser = argparse.ArgumentParser()
-parser.add_argument('-f', '--fullscreen',
-                    help='Display window in full screen', action='store_true')
-parser.add_argument(
-    '-d', '--debug', help='Display debug info', action='store_true')
-parser.add_argument(
-    '-fl', '--flip', help='Flip incoming video signal', action='store_true')
-args = parser.parse_args()
 
 # create model
 model = Sequential()
@@ -64,14 +57,15 @@ def get_gpu_temp():
 
 # start the webcam feed
 cap = cv2.VideoCapture(0)
-while True:
-    # time for fps
-    start_time = time.time()
 
+# RingBuffer
+size = 20
+# ringString for Debugging
+ringString = RingBuffer(size)
+ring = RingBuffer(size)
+while True:
     # Find haar cascade to draw bounding box around face
     ret, frame = cap.read()
-    if args.flip:
-        frame = cv2.flip(frame, -1)
     if not ret:
         break
     facecasc = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
@@ -85,26 +79,12 @@ while True:
             cv2.resize(roi_gray, (48, 48)), -1), 0)
         prediction = model.predict(cropped_img)
         maxindex = int(np.argmax(prediction))
-        cv2.putText(frame, emotion_dict[maxindex], (x+20, y-60),
-                    cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
-
-    # full screen
-    if args.fullscreen:
-        cv2.namedWindow("video", cv2.WND_PROP_FULLSCREEN)
-        cv2.setWindowProperty("video", cv2.WND_PROP_FULLSCREEN, 1)
-
-    # debug info
-    if args.debug:
-        fps = str(int(1.0 / (time.time() - start_time)))
-        cv2.putText(frame, fps + " fps", (20, 60), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2, cv2.LINE_AA)
-        if sys.platform == 'linux':
-            cpu_temp = str(int(CPUTemperature().temperature)) + " C (CPU)"
-            cv2.putText(frame, cpu_temp, (20, 95), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2, cv2.LINE_AA)
-            cv2.putText(frame, get_gpu_temp() + " C (GPU)", (20, 130), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2, cv2.LINE_AA)
-    cv2.imshow('video', cv2.resize(
-        frame, (800, 480), interpolation=cv2.INTER_CUBIC))
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
+        # Ringbuffer append
+        # with debugging
+        ring.append(maxindex)
+        ringString.append(emotion_dict[maxindex])
+        print('---------------------------------')
+        print(emotion_dict[ring.getMode()])  # print RingBuffer
+        print(ringString.get())  # print Debug Ring
 
 cap.release()
-cv2.destroyAllWindows()
