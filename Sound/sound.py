@@ -1,29 +1,53 @@
 import pygame
 import os,sys
+import yaml
+import random
 
 #--Konstanten--
-APP_FOLDER = os.path.dirname(os.path.realpath(sys.argv[0]))
 TRACK_FOLDER = "tracks/"
-TRACKS_PATH = os.path.join(APP_FOLDER, TRACK_FOLDER)
-#print("TRACKS_PATH: " + TRACKS_PATH)
+EMOTION_TRACKS = "emotionTracks.yaml"
+PATH_TO_SOURCE = os.path.abspath(os.path.dirname( __file__ ))
+PATH_TO_TRACKS = os.path.join(PATH_TO_SOURCE, TRACK_FOLDER)
 
-# dictionary which assigns each label an emotion (alphabetical order)
-# emotion_dict = {0: "Angry", 1: "Disgusted", 2: "Fearful",
-#                 3: "Happy", 4: "Neutral", 5: "Sad", 6: "Surprised"}
+def getSongList(emotion):
+    '''
+    Liefert eine Liste an Songs aus der Konfigurationsdatei
+    '''
+    with open(os.path.join(PATH_TO_SOURCE, EMOTION_TRACKS), "r") as t:
+        dictionary = yaml.safe_load(t)
+    try:
+        tracks = dictionary[emotion]
+    except KeyError:
+        print("The Key " + emotion + "does not exist")
+        return None
+    print("Die Liste an Songs lautet: " + str(tracks))
+    return tracks
 
-#TODO Auslagern in eine Konfigurations-Datei json oder yaml
-emotionTracks = {"Happy": "Ketsa - Good Vibe.mp3",
-                "Sad" : "applause-1.wav",
-                "Angry": "Simon Panrucker - Angry Dance.mp3"}
 
-print("Type \"Happy\", \"Angry\" or \"Sad\" for Song selection:")
-emotion = input()
-trackToPlay = emotionTracks[emotion]
+def main():
+    print ("Path to Source: " + str(PATH_TO_SOURCE))
+    print("Path to Tracks: " + PATH_TO_TRACKS)
+    print("Type \"Happy\", \"Angry\" or \"Sad\" for Song selection:")
+    emotion = input()
+    
+    tracksToPlay = getSongList(emotion)
+    if(tracksToPlay is None):
+        print("No Song avalible")
+    else:
+        trackToPlay = random.choice(tracksToPlay)
+        '''
+        Falls hier der Fehler:
+        NotImplementedError: mixer module not available (ImportError: libSDL2_mixer-2.0.so.0: cannot open shared object file: No such file or directory)
+        kommt muss das das package noch installiert werden:
+        sudo apt install libsdl2-mixer-2.0-0 
+        '''
+        pygame.mixer.init()
+        print("Path to Track to play: "+ os.path.join(PATH_TO_TRACKS ,trackToPlay))
+        pygame.mixer.music.load(os.path.join(PATH_TO_TRACKS ,trackToPlay))
+        pygame.mixer.music.play()
 
-pygame.mixer.init()
-pygame.mixer.music.load(TRACKS_PATH + trackToPlay)
-pygame.mixer.music.play()
+        while pygame.mixer.music.get_busy() == True:
+            continue
 
-while pygame.mixer.music.get_busy() == True:
-    continue
-
+if __name__ == "__main__":
+    main()
