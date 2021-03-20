@@ -27,7 +27,8 @@ def getSongList(emotion):
 def main():
     print ("Path to Source: " + str(PATH_TO_SOURCE))
     print("Path to Tracks: " + PATH_TO_TRACKS)
-    print("Type \"Happy\", \"Angry\" or \"Sad\" for Song selection:")
+    print("Test over SSH")
+    print("Type \"Angry\", \"Disgusted\", \"Fearful\", \"Happy\", \"Neutral\", \"Sad\" or \"Surprised\" for Song selection:")
     emotion = input()
     
     tracksToPlay = getSongList(emotion)
