@@ -32,7 +32,7 @@ def getSongList(emotion):
 def getPathToNextSong(cycleSongList):
     nextSong = next(cycleSongList)
     pathToNextSong = os.path.join(PATH_TO_TRACKS ,nextSong)
-    print("Path to Next Random Track to play: " + pathToNextSong)
+    print("Path to Next Song Track to play: " + pathToNextSong)
     return pathToNextSong
 
 def setCurrentEmotion():
@@ -89,13 +89,17 @@ def init():
     else:
         print("Mixer Parameter: ")
         print(pygame.mixer.get_init())
-        
+
+def playNextSong():
+    pathToNextSong = getPathToNextSong(g_currentPlaylist)
+    pygame.mixer.music.load(pathToNextSong)
+    pygame.mixer.music.play(loops=0, start=0.0, fade_ms = 0)
+
 
 def threadMain(queue):
+    global g_currentEmotion
+    global g_currentPlaylist
     init()
-    emotionInQueue = "Happy"
-    g_currentEmotion = emotionInQueue
-    setCurrentPlaylist()
     while True:
         if pygame.mixer.get_busy():
             time.sleep(0.1)
@@ -103,13 +107,35 @@ def threadMain(queue):
             if not queue.empty():
                 #TODO alle holen und nur die letze beruecksichtigen
                 emotionInQueue = queue.get(block=False, timeout=None)
-                g_currentEmotion = emotionInQueue
-                setCurrentPlaylist()
-            else:
-                pathToNextSong = getPathToNextSong(g_currentPlaylist)
-                pygame.mixer.music.load(pathToNextSong)
-                pygame.mixer.music.play(loops=0, start=0.0, fade_ms = 0)
+                print("New Emotion recieved: " + emotionInQueue)
+               #Nur wenn neue Emption kommt neue Playlist setzen
+                if (g_currentEmotion != emotionInQueue):
+                    g_currentEmotion = emotionInQueue
+                    setCurrentPlaylist()
+                    playNextSong()
 
+    # while True:
+    #     print (str(g_currentPlaylist))
+    #     emotionInQueue = None
+    #     try:
+    #         emotionInQueue = queue.get(block=False, timeout=None)
+    #     except: #Es fliegt eine Empty exception, wenn nichts in der queue
+    #         time.sleep(1)
+    #     else:
+    #         print("New Emotion recieved: " + emotionInQueue)
+    #         #Wenn neue Emotion kommit -> Neustarten, ansonsten weiterspielen
+    #         if (g_currentEmotion != emotionInQueue):
+    #             g_currentEmotion = emotionInQueue
+    #             setCurrentPlaylist()
+    #             playNextSong()
+    #     if pygame.mixer.get_busy():
+    #         time.sleep(1)
+    #     else:
+    #         if g_currentPlaylist is not None:
+    #             playNextSong()
+            
+
+            
 
 if __name__ == "__main__":
     main()
