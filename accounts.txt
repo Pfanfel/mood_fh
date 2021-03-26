@@ -1,0 +1,6 @@
+Protonmail:
+    Mail:mood_fh@protonmail.com
+    PW:das ist ein tolles projekt
+Spotify/Spotify Developer Account:
+    Mail:mood_fh@protonmail.com
+    PW:das ist ein tolles projekt
