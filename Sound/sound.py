@@ -101,6 +101,9 @@ def threadMain(queue):
     global g_currentPlaylist
     init()
     while True:
+        handleQueue(queue)
+        handleState()
+        handle
         if pygame.mixer.get_busy():
             time.sleep(0.1)
         else:

@@ -9,3 +9,5 @@
     * requrements.txt aktualisieren um mpd nutzen zu können, um aus python heraus mit dem Server kommunizieren zu können
     * `mopidy` zum autostart hinzufuegen mit `sudo dpkg-reconfigure mopidy`
     * Überpruefen mit `sudo service mopidy status`
+
+    #TODO neuer pfad der mopidy config: /etc/mopidy/mopidy.conf um beim staert

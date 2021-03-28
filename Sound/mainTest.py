@@ -1,20 +1,26 @@
 import threading
 import queue
-import sound
+import code
+from soundClazz import AudioThread, MopidyPlayer, PygamePlayer
 
-g_queue = queue.Queue()
+#Je nachdem was getestet
+audioThread = AudioThread(PygamePlayer)
+# audioThread = AudioThread(MopidyPlayer)
+def send(emotion):
+    audioThread.send_emotion(emotion)
 
-def setEmotion(emotion):
-    g_queue.put(str(emotion))
-
+def kill():
+    audioThread.kill()
+    audioThread.join()
 
 def main():
-    print("mit python -i ausfuehren und in der interaktiven Shell mit setEmotion(\"Happy\",\"Angry\" oder \"Sad\") die Emotion steuern")
-    soundThread = threading.Thread(target=sound.threadMain,
-                    args=(g_queue, ),
-                    daemon=True,
-                    name="sound module")
-    soundThread.start()
+    print("mit python ausfuehren und in der interaktiven Shell mit send(\"Happy\") oder \"Angry\" oder \"Sad\" die Emotion steuern")
+    audioThread.start()
+
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+        code.interact(local=globals()) #Nur zum interactiv testen
+    finally:
+        kill()

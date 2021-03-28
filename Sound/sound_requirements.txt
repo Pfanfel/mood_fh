@@ -1,0 +1,4 @@
+piripherals==0.1a9
+pygame==2.0.1
+python-mpd2==3.0.4
+PyYAML==5.4.1
