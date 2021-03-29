@@ -120,7 +120,7 @@ wird zu:
 `$ sudo cp /etc/lirc/lircd.conf /etc/lirc/lircd_original.conf`  
 `$ sudo cp ~/lircd.conf /etc/lirc/lircd.conf`  
   
-**Rebooten und Lirc neu starten.**
+**Rebooten und Lirc neu starten.**  
 `$ sudo reboot`  
 `$ sudo restart lircd`  
   
