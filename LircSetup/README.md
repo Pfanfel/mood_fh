@@ -15,11 +15,11 @@ Der Empfänger ist über einen Controller an Pin 2,6 und 12 verbunden.
 `$ sudo apt-get update`  
 `$ sudo apt-get install lirc`  
   
-**Folgende Zeilen zu /etc/modules hinzufügen.**  
+**Folgende Zeilen zu */etc/modules* hinzufügen.**  
 > lirc_dev  
 > gpio_ir gpio_in_pin=18 gpio_out_pin=17  
   
-**Folgende Zeilen zu /etc/lirc/hardware.conf hinzufügen.**  
+**Folgende Zeilen zu */etc/lirc/hardware.conf* hinzufügen.**  
 > LIRCD_ARGS="--uinput --listen"  
 > LOAD_MODULES=true  
 > DRIVER="default"  
@@ -28,10 +28,10 @@ Der Empfänger ist über einen Controller an Pin 2,6 und 12 verbunden.
 > LIRCD_CONF=""  
 > LIRCMD_CONF=""  
   
-**Folgende Zeile in /boot/config.txt ändern.**  
+**Folgende Zeile in */boot/config.txt* ändern.**  
 > dtoverlay=gpio-ir,gpio_out_pin=17,gpio_in_pin=18,gpio_in_pull=up  
   
-**Folgende Zeile in /boot/config.txt ändern.**  
+**Folgende Zeile in */boot/config.txt* ändern.**  
 > driver    = default  
 > device    = /dev/lirc0  
   
@@ -56,17 +56,17 @@ Der Empfänger ist über einen Controller an Pin 2,6 und 12 verbunden.
 Dafür einen Blick auf die vordefinierte Namensliste werfen.  
 `$ sudo irrecord -l`  
   
-**Aufnahme starten und den Anweisungen folgen.**  
+Aufnahme starten und den Anweisungen folgen.  
 `$ sudo irrecord -d /dev/lirc0 ~/lircd.conf`  
   
-**Prüfen, ob die erstellte Datei den richtigen Namen hat.**  
+Prüfen, ob die erstellte Datei den richtigen Namen hat.  
 `$ cd /home/pi`  
 `$ find lircd.conf`  
   
-**Wenn lircd.conf nicht gefunden wurde, wurde die Namensgebung nicht übernommen.**  
-**Die richtige \*.conf Datei muss gesucht und umbenannt werden.**  
+Wenn *lircd.conf* nicht gefunden wurde, wurde die Namensgebung nicht übernommen.  
+Die richtige *\*.conf* Datei muss gesucht und umbenannt werden.  
   
-Beispielhaft für eine richtig erstellte .conf-Datei:  
+Beispiel für eine richtig erstellte *.conf*-Datei:  
   
 > begin remote  
 >   
@@ -97,7 +97,7 @@ Beispielhaft für eine richtig erstellte .conf-Datei:
 >     
 > end remote  
   
-**Falls noch weitere Keycodes hinter den Codes stehen, müssen diese entfernt werden.**  
+Falls noch weitere Keycodes hinter den Codes stehen, müssen diese entfernt werden.  
   
 Beispiel:  
   
