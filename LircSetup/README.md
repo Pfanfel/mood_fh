@@ -3,7 +3,7 @@
 In diesem Beispiel wird ein VS1838b Infrarot-Empfänger verwendet.
 **Aufbau**
 <img src="images/RaspberryPi_B+_Pins.png" width="300"><br>
-<img src="images/RaspberryPi_B+_Setup.jpg" width="300">
+<img src="images/RaspberryPi_B+_Setup.jpg" width="300"><br>
 Der Empfänger ist über einen Controller an Pin 2,6 und 12 verbunden.
 
 **Lirc installieren**
@@ -12,7 +12,6 @@ Der Empfänger ist über einen Controller an Pin 2,6 und 12 verbunden.
 
 **Folgende zeilen zu /etc/modules hinzufügen**
 > lirc_dev
-<br>
 > gpio_ir gpio_in_pin=18 gpio_out_pin=17
 
 Das virtual environment aktivieren
