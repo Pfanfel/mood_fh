@@ -31,7 +31,7 @@ Der Empfänger ist über einen Controller an Pin 2,6 und 12 verbunden.
 **Folgende Zeile in */boot/config.txt* ändern.**  
 > dtoverlay=gpio-ir,gpio_out_pin=17,gpio_in_pin=18,gpio_in_pull=up  
   
-**Folgende Zeile in */boot/config.txt* ändern.**  
+**Folgende Zeilen in */boot/config.txt* ändern.**  
 > driver    = default  
 > device    = /dev/lirc0  
   
