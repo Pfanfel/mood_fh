@@ -51,6 +51,7 @@ Der Empfänger ist über einen Controller an Pin 2,6 und 12 verbunden.
 > Using device: /dev/lirc0  
 > pulse 9126  
 > space 4478  
+> ...  
   
 **Belegung der Fernbedienung aufnehmen.**  
 Dafür einen Blick auf die vordefinierte Namensliste werfen.  
@@ -132,6 +133,7 @@ wird zu:
 > 0000000000ff18e7 01 KEY_2 IR-Len  
 > 0000000000ff7a85 00 KEY_3 IR-Len  
 > 0000000000ff7a85 01 KEY_3 IR-Len  
+> ...  
   
 **Anschließend testweise ein Skript erstellen, welches auf Signale der Fernbedienung wartet.**  
 In diesem Beispiel wird irexec genutzt. Im Homeverzeichnis muss eine Konfigurationsdatei erstellt werden,  
