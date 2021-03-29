@@ -49,18 +49,18 @@ Der Empfänger ist über einen Controller an Pin 2,6 und 12 verbunden.
 > space 4478  
   
 **Belegung der Fernbedienung aufnehmen**  
-Dafür am besten einen Blick auf die vordefinierte Namensliste werfen.
+Dafür einen Blick auf die vordefinierte Namensliste werfen.  
 `$ sudo irrecord -l`  
-**Aufnahme starten und tun den Anweisungen folgen**  
+**Aufnahme starten und den Anweisungen folgen**  
 `$ sudo irrecord -d /dev/lirc0 ~/lircd.conf`  
-
-**Prüfen, ob die erstellte Datei den richtigen Namen hat**
+  
+**Prüfen, ob die erstellte Datei den richtigen Namen hat**  
 `$ cd /home/pi`  
 `$ find lircd.conf`  
-
-**Wenn lircd.conf nicht gefunden wurde,**  
-**wurde die Namensgebung nicht übernommen und die richtige \*.conf Datei muss gesucht und umbenannt werden.**  
-Beispielhaft sieht eine .conf Datei so aus  
+  
+**Wenn lircd.conf nicht gefunden wurde, wurde die Namensgebung nicht übernommen.**  
+**Die richtige \*.conf Datei muss gesucht und umbenannt werden.**  
+Beispielhaft für eine richtig erstellte .conf-Datei:  
 > begin remote  
 >   
 > name  IR-Len  
@@ -76,7 +76,6 @@ Beispielhaft sieht eine .conf Datei so aus
 > repeat       9113  2225  
 > gap          107884  
 > toggle_bit_mask 0x0  
->   
 >     begin codes  
 >         KEY_0                    0x00FF6897  
 >         KEY_1                    0x00FF30CF  
@@ -87,67 +86,60 @@ Beispielhaft sieht eine .conf Datei so aus
 >         KEY_5                    0x00FF38C7  
 >         KEY_6                    0x00FF5AA5  
 >     end codes  
->   
 > end remote  
-
-#Falls noch weitere Keycodes hinter den Codes stehen bitte entfernen.
-# Beispiel
-
-      begin codes
-          KEY_0                    0x00FF6897 0x00000000
-      end codes
-
-#wird zu
-
-      begin codes
-          KEY_0                    0x00FF6897
-      end codes
-
-# -----------------------------------------------------------------------------------------
-
-# Nun kopieren wir die erstellte Konfigurationsdatei noch in das LIRC Verzeichnis,
-# damit es verwendet werden kann. Vorher aber ein Backup erstellen.
-
-sudo cp /etc/lirc/lircd.conf /etc/lirc/lircd_original.conf
-sudo cp ~/lircd.conf /etc/lirc/lircd.conf
-
-# Um die Änderungen zu übernehmen, rebooten wir und starten Lirc erneut.
-$ sudo reboot
-$ sudo restart lircd
-
-# Um zu testen, ob alles geklappt hat.
-$ irw
-0000000000ff30cf 00 KEY_1 IR-Len
-0000000000ff30cf 01 KEY_1 IR-Len
-0000000000ff18e7 00 KEY_2 IR-Len
-0000000000ff18e7 01 KEY_2 IR-Len
-0000000000ff7a85 00 KEY_3 IR-Len
-0000000000ff7a85 01 KEY_3 IR-Len
-
-# Anschließend wollen wir ein Skript starten lassen, welches auf Signale wartet.
-# Wir nutzen in diesem Beispiel irexec.
-# Im Homeverzeichnis muss eine Konfigurationsdatei erstellt werden,
-# in welcher wir zu übergebene Parameter festlegen
-$ sudo nano ~/.lircrc
-
-begin
-    button = KEY_1
-    prog   = irexec
-    config = echo "KEY_1 pressed.";
-end
-
-begin
-    button = KEY_2
-    button = KEY_3
-    prog   = irexec
-    config = echo "KEY_2, then KEY_3 pressed.";
-end
-
-# Statt dem verwendeten echo ".." kann auch jeder andere Terminal Befehl verwendet werden (z.B. python skript.py).
-# So lassen sich einfach Programme und Befehle auf Knopfdruck starten.
-# Um auf IR Codes der Fernbedienung zu warten, müssen wir das Programm starten.
-# Dazu einfach folgenden Befehl in das Terminal eingeben
-
-$ irexec
-
-Die Ausgaben von echo ".." sollten also direkt nach Tastendruck angezeigt werden.
+  
+**Falls noch weitere Keycodes hinter den Codes stehen, müssen diese entfernt werden**  
+Beispiel  
+  
+> begin codes  
+>     KEY_0                    0x00FF6897 0x00000000  
+> end codes  
+  
+wird zu  
+  
+> begin codes  
+>     KEY_0                    0x00FF6897  
+> end codes  
+  
+**Konfigurationsdatei in das LIRC Verzeichnis kopieren**  
+**Vorher ein Backup erstellen.**  
+`$ sudo cp /etc/lirc/lircd.conf /etc/lirc/lircd_original.conf`  
+`$ sudo cp ~/lircd.conf /etc/lirc/lircd.conf`  
+  
+**Rebooten und Lirc neu starten.**
+`$ sudo reboot`  
+`$ sudo restart lircd`  
+  
+**Testen, ob alles funktioniert.**  
+`$ irw`  
+> 0000000000ff30cf 00 KEY_1 IR-Len  
+> 0000000000ff30cf 01 KEY_1 IR-Len  
+> 0000000000ff18e7 00 KEY_2 IR-Len  
+> 0000000000ff18e7 01 KEY_2 IR-Len  
+> 0000000000ff7a85 00 KEY_3 IR-Len  
+> 0000000000ff7a85 01 KEY_3 IR-Len  
+  
+**Anschließend testweise ein Skript erstellen, welches auf Signale der Fernbedienung wartet.**  
+**In diesem Beispiel wird irexec genutzt.**  
+**Im Homeverzeichnis muss eine Konfigurationsdatei erstellt werden,**  
+**in welcher zu übergebene Parameter festgelegt werden.**  
+`$ sudo nano ~/.lircrc`  
+  
+> begin  
+>     button = KEY_1  
+>     prog   = irexec  
+>     config = echo "KEY_1 pressed.";  
+> end  
+>   
+> begin  
+>     button = KEY_2  
+>     button = KEY_3  
+>     prog   = irexec  
+>     config = echo "KEY_2, then KEY_3 pressed.";  
+> end  
+  
+**Statt dem verwendeten echo ".." kann auch jeder andere Terminal Befehl verwendet werden (z.B. python skript.py).**  
+**So lassen sich einfach Programme und Befehle auf Knopfdruck starten.**  
+**Um auf IR Codes der Fernbedienung zu warten, muss das Programm gestartet werden.**  
+`$ irexec`  
+Die Ausgaben von echo ".." sollten direkt nach Tastendruck angezeigt werden.
