@@ -1,21 +1,25 @@
 # LircSetup  
   
+  
 In diesem Beispiel wird ein VS1838b Infrarot-Empfänger verwendet.  
-**Aufbau**  
+  
+**Aufbau:**  
+  
 <br>
 <img src="images/RaspberryPi_B+_Pins.png" width="500">
 <img src="images/RaspberryPi_B+_Setup.jpg" width="300"><br>
+  
 Der Empfänger ist über einen Controller an Pin 2,6 und 12 verbunden.  
   
-**Lirc installieren**  
+**Lirc installieren.**  
 `$ sudo apt-get update`  
 `$ sudo apt-get install lirc`  
   
-**Folgende Zeilen zu /etc/modules hinzufügen**  
+**Folgende Zeilen zu /etc/modules hinzufügen.**  
 > lirc_dev  
 > gpio_ir gpio_in_pin=18 gpio_out_pin=17  
   
-**Folgende Zeilen zu /etc/lirc/hardware.conf hinzufügen**  
+**Folgende Zeilen zu /etc/lirc/hardware.conf hinzufügen.**  
 > LIRCD_ARGS="--uinput --listen"  
 > LOAD_MODULES=true  
 > DRIVER="default"  
@@ -24,22 +28,22 @@ Der Empfänger ist über einen Controller an Pin 2,6 und 12 verbunden.
 > LIRCD_CONF=""  
 > LIRCMD_CONF=""  
   
-**Folgende Zeile zu /boot/config.txt zu ändern**  
+**Folgende Zeile zu /boot/config.txt zu ändern.**  
 > dtoverlay=gpio-ir,gpio_out_pin=17,gpio_in_pin=18,gpio_in_pull=up  
   
-**Folgende Zeile in /boot/config.txt zu ändern**  
+**Folgende Zeile in /boot/config.txt zu ändern.**  
 > driver    = default  
 > device    = /dev/lirc0  
   
-**Lirc neu starten und Status prüfen, ob es läuft**  
+**Lirc neu starten und Status prüfen, ob es läuft.**  
 `$ sudo /etc/init.d/lircd stop`  
 `$ sudo /etc/init.d/lircd start`  
 `$ sudo /etc/init.d/lircd status`  
   
-**Pi vor dem Testen neu starten**  
+**Pi vor dem Testen neu starten.**  
 `$ sudo reboot`  
   
-**Testen, ob Lirc funktioniert**  
+**Testen, ob Lirc funktioniert.**  
 `$ sudo /etc/init.d/lircd stop`  
 `$ mode2 -d /dev/lirc0`  
 > Using driver default on device /dev/lirc0  
@@ -48,19 +52,22 @@ Der Empfänger ist über einen Controller an Pin 2,6 und 12 verbunden.
 > pulse 9126  
 > space 4478  
   
-**Belegung der Fernbedienung aufnehmen**  
+**Belegung der Fernbedienung aufnehmen.**  
 Dafür einen Blick auf die vordefinierte Namensliste werfen.  
 `$ sudo irrecord -l`  
-**Aufnahme starten und den Anweisungen folgen**  
+  
+**Aufnahme starten und den Anweisungen folgen.**  
 `$ sudo irrecord -d /dev/lirc0 ~/lircd.conf`  
   
-**Prüfen, ob die erstellte Datei den richtigen Namen hat**  
+**Prüfen, ob die erstellte Datei den richtigen Namen hat.**  
 `$ cd /home/pi`  
 `$ find lircd.conf`  
   
 **Wenn lircd.conf nicht gefunden wurde, wurde die Namensgebung nicht übernommen.**  
 **Die richtige \*.conf Datei muss gesucht und umbenannt werden.**  
+  
 Beispielhaft für eine richtig erstellte .conf-Datei:  
+  
 > begin remote  
 >   
 > name  IR-Len  
@@ -76,6 +83,7 @@ Beispielhaft für eine richtig erstellte .conf-Datei:
 > repeat       9113  2225  
 > gap          107884  
 > toggle_bit_mask 0x0  
+>   
 >     begin codes  
 >         KEY_0                    0x00FF6897  
 >         KEY_1                    0x00FF30CF  
@@ -86,22 +94,28 @@ Beispielhaft für eine richtig erstellte .conf-Datei:
 >         KEY_5                    0x00FF38C7  
 >         KEY_6                    0x00FF5AA5  
 >     end codes  
+>     
 > end remote  
   
-**Falls noch weitere Keycodes hinter den Codes stehen, müssen diese entfernt werden**  
-Beispiel  
+**Falls noch weitere Keycodes hinter den Codes stehen, müssen diese entfernt werden.**  
   
+Beispiel:  
+  
+>   
 > begin codes  
 >     KEY_0                    0x00FF6897 0x00000000  
 > end codes  
+>   
   
-wird zu  
+wird zu:  
   
+>   
 > begin codes  
 >     KEY_0                    0x00FF6897  
 > end codes  
+>   
   
-**Konfigurationsdatei in das LIRC Verzeichnis kopieren**  
+**Konfigurationsdatei in das LIRC Verzeichnis kopieren.**  
 **Vorher ein Backup erstellen.**  
 `$ sudo cp /etc/lirc/lircd.conf /etc/lirc/lircd_original.conf`  
 `$ sudo cp ~/lircd.conf /etc/lirc/lircd.conf`  
