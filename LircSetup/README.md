@@ -64,7 +64,7 @@ Prüfen, ob die erstellte Datei den richtigen Namen hat.
 `$ find lircd.conf`  
   
 Wenn *lircd.conf* nicht gefunden wurde, wurde die Namensgebung nicht übernommen.  
-Die richtige *\*.conf* Datei muss gesucht und umbenannt werden.  
+Die richtige *\*.conf*-Datei muss gesucht und umbenannt werden.  
   
 Beispiel für eine richtig erstellte *.conf*-Datei:  
   
@@ -134,9 +134,8 @@ wird zu:
 > 0000000000ff7a85 01 KEY_3 IR-Len  
   
 **Anschließend testweise ein Skript erstellen, welches auf Signale der Fernbedienung wartet.**  
-**In diesem Beispiel wird irexec genutzt.**  
-**Im Homeverzeichnis muss eine Konfigurationsdatei erstellt werden,**  
-**in welcher zu übergebene Parameter festgelegt werden.**  
+In diesem Beispiel wird irexec genutzt. Im Homeverzeichnis muss eine Konfigurationsdatei erstellt werden,  
+in welcher zu übergebene Parameter festgelegt werden.  
 `$ sudo nano ~/.lircrc`  
   
 > begin  
@@ -152,8 +151,9 @@ wird zu:
 >     config = echo "KEY_2, then KEY_3 pressed.";  
 > end  
   
-**Statt dem verwendeten echo ".." kann auch jeder andere Terminal Befehl verwendet werden (z.B. python skript.py).**  
-**So lassen sich einfach Programme und Befehle auf Knopfdruck starten.**  
-**Um auf IR Codes der Fernbedienung zu warten, muss das Programm gestartet werden.**  
+Statt dem verwendeten echo ".." kann auch jeder andere Terminal Befehl verwendet werden (z.B. python skript.py).  
+So lassen sich einfach Programme und Befehle auf Knopfdruck starten.  
+Um auf IR Codes der Fernbedienung zu warten, muss das Programm gestartet werden.  
 `$ irexec`  
+  
 Die Ausgaben von echo ".." sollten direkt nach Tastendruck angezeigt werden.
