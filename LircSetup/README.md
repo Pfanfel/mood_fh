@@ -156,4 +156,4 @@ So lassen sich einfach Programme und Befehle auf Knopfdruck starten.
 Um auf IR Codes der Fernbedienung zu warten, muss das Programm gestartet werden.  
 `$ irexec`  
   
-Die Ausgaben von echo ".." sollten direkt nach Tastendruck angezeigt werden.
+Die Ausgaben von echo ".." sollten direkt nach Tastendruck angezeigt werden.  
