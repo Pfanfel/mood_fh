@@ -2,6 +2,7 @@
 
 In diesem Beispiel wird ein VS1838b Infrarot-Empfänger verwendet.
 **Aufbau**
+<br>
 <img src="images/RaspberryPi_B+_Pins.png" width="300"><br>
 <img src="images/RaspberryPi_B+_Setup.jpg" width="300"><br>
 Der Empfänger ist über einen Controller an Pin 2,6 und 12 verbunden.
