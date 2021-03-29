@@ -1,0 +1,17 @@
+---
+#Die Playlists, welche bei der jew. Emotion abgespielt werden sollen.
+#Muessen in dem Format "<Playlistname> (by <Profilname>)" angegeben werden
+angry:
+  'angry music  (by alexkokosko)'
+disgusted:
+  'DISGUSTED! (by shannonobrien6)'
+fearful:
+  'Fear The Walking Dead: The Ultimate Soundtrack (by 11181446986)'
+happy:
+  'Happy Hits! (by spotify)'
+neutral:
+  'Background Music (by oxob2090gqlwewrx3xxjmnbf3)'
+sad:
+  'Sad Songs 😢 for crying myself to sleep. (by sanik007)'
+surprised:
+  'You & Me (by spotify)'
