@@ -6,6 +6,7 @@ os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide" #Damit nicht immer die pygame 
 import pygame
 import yaml
 import random
+from piripherals import MPD
 
 class MopidyPlayer:
     #--Konstanten--
@@ -16,7 +17,6 @@ class MopidyPlayer:
         '''
         Konstruktor, welcher einen Client erstellt, um mit dem mopidy Server zu kommunizieren.
         '''
-        from piripherals import MPD
 
         self.c = MPD()
         self.c.connect("localhost", 6600)
@@ -75,7 +75,6 @@ class PygamePlayer:
     def __init__(self):
         '''
         Konstruktor fuer den PygamePlayer.
-
         Falls hier der Fehler:
         NotImplementedError: mixer module not available (ImportError: libSDL2_mixer-2.0.so.0: cannot open shared object file: No such file or directory)
         kommt muss folgendes package noch installiert werden:
@@ -144,6 +143,7 @@ class PygamePlayer:
 class AudioThread(threading.Thread): #Erbt von Thread
     #--Konstanten--
     DELAY = 0.1
+    VOLUME_STEP = 10
 
     def __init__(self, PlayerClass):
         '''
@@ -155,6 +155,7 @@ class AudioThread(threading.Thread): #Erbt von Thread
         self.new_emotion = None
         self.emotion = None
         self.killed = threading.Event()#Zum synchronisieren, damit darauf gewartet werden kann. 
+        self.volume = 100
 
     def run(self):
         '''
@@ -174,13 +175,35 @@ class AudioThread(threading.Thread): #Erbt von Thread
     def kill(self):
         self.killed.set()
 
+    def _decrease_volume(self):
+        print("vol down")
+        if (self.volume - self.VOLUME_STEP >= 0):
+            self.volume -= self.VOLUME_STEP
+        else:
+            print("Min volume")
+        print(f"New Volume: {self.volume}")
+
+    def _increase_volume(self):
+        print("vol up")
+        if (self.volume + self.VOLUME_STEP <= 100):
+            self.volume += self.VOLUME_STEP
+        else:
+            print("Max volume")
+        print(f"New Volume: {self.volume}")
+
     def _handle_queue(self):
         '''
         Kuemmert sich um die Nachrichten, welche aus der queue kommen und beachtet nur die letze.
         '''
         try:
             while True: #Lauft bis eine Exception fliegt (queue leer)
-                self.new_emotion = self.queue.get(block=False, timeout=None)
+                msg = self.queue.get(block=False, timeout=None)
+                if(msg == "+"):
+                    self._increase_volume()
+                elif(msg == "-"):
+                    self._decrease_volume()
+                else:
+                    self.new_emotion = msg
         except queue.Empty:
             pass
 
@@ -202,6 +225,7 @@ class AudioThread(threading.Thread): #Erbt von Thread
             self.emotion = self.new_emotion
             self.new_emotion = None
 
+        #TODO: Hier eine updateVolume Methode aufrufen? oder einen parameter an tick übergeben, welcher dann verarbeitet wird, falls dieser sich aendert 
         self.player.tick()
 
     def _sleep(self):

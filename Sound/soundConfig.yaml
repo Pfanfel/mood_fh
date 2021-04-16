@@ -1,0 +1,5 @@
+---
+# Bestimmt welcher Musikplayer geladen werden soll:
+# "pygame" für den lokalen Player
+# "mopidy" für den Musik-Server-Player welcher mit Spotify verbunden ist.  
+player_type: pygame
