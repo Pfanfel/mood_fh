@@ -12,12 +12,13 @@ class MopidyPlayer:
     #--Konstanten--
     PATH_TO_SOURCE = os.path.abspath(os.path.dirname( __file__ ))
     PATH_TO_CONFIG = os.path.join(PATH_TO_SOURCE, "spotifyPlaylists.yaml")
+    VOLUME_STEP = 10
     
     def __init__(self):
         '''
         Konstruktor, welcher einen Client erstellt, um mit dem mopidy Server zu kommunizieren.
         '''
-
+        self.volume = 40
         self.c = MPD()
         self.c.connect("localhost", 6600)
         #self.c.crossfade(1) #Ist aufgrund eines Bugs bei mopidy-mpd nicht möglich.
@@ -40,6 +41,7 @@ class MopidyPlayer:
             self.c.load(playlist)
             self.c.shuffle()
             self.c.play()
+            print(self.c.status())
 
     def close(self):
         '''
@@ -48,6 +50,33 @@ class MopidyPlayer:
         Programm beendet wurde.  
         '''
         self.c.stop()
+
+    def decrease_volume(self):
+        if (self.volume - self.VOLUME_STEP >= 0):
+            self.volume -= self.VOLUME_STEP
+        else:
+            print("Min volume")
+        print(f"New Volume: {self.volume}")
+        self.c.setvol(self.volume)
+        print(self.c.status())
+
+    def increase_volume(self):
+        if (self.volume + self.VOLUME_STEP <= 100):
+            self.volume += self.VOLUME_STEP
+        else:
+            print("Max volume")
+        print(f"New Volume: {self.volume}")
+        self.c.setvol(self.volume)
+        print(self.c.status())
+
+    def toggle_pause(self):
+        self.c.toggle_play()
+
+    def play_next_song(self):
+        if (self.c.state() == "pause"):
+            self.c.toggle_play()
+        self.c.next()
+        print("Last Song info: " + str(self.c.currentsong()))
 
     def _load_playlist(self, emotion):
         '''
@@ -71,6 +100,7 @@ class PygamePlayer:
     PATH_TO_TRACKS = os.path.join(PATH_TO_SOURCE, "tracks")
     PATH_TO_CONFIG = os.path.join(PATH_TO_SOURCE, "pygamePlaylists.yaml")
     FADE_TIME_MS = 500 #Fuer fade in und fade out genutzt (fade dauert also FADE_TIME_MS*2)
+    VOLUME_STEP = 10 #Sollte %100 == 0 sein
     
     def __init__(self):
         '''
@@ -89,13 +119,15 @@ class PygamePlayer:
             print(mixer_info)
 
         self.playlist = None
+        self.volume = 40
+        self.paused = False
     
     def tick(self):
         '''
         Prueft ob der aktuelle Song zuende ist und spielt ggf. den naechsten.
         '''
-        if not pygame.mixer.music.get_busy():
-            self._play_next_song()
+        if not self.paused and not pygame.mixer.music.get_busy():
+            self.play_next_song()
 
     def play(self, emotion):
         '''
@@ -105,13 +137,54 @@ class PygamePlayer:
         #Setze neue Playlist
         self._update_playlist(emotion)
         #Starte die Playlist
-        self._play_next_song()
+        self.play_next_song()
+
+    def decrease_volume(self):
+        if (self.volume - self.VOLUME_STEP >= 0):
+            self.volume -= self.VOLUME_STEP
+        else:
+            print("Min volume")
+        print(f"New Volume: {self.volume}")
+        pygame.mixer.music.set_volume(self.volume/100.0)
+    
+
+    def increase_volume(self):
+        if (self.volume + self.VOLUME_STEP <= 100):
+            self.volume += self.VOLUME_STEP
+        else:
+            print("Max volume")
+        print(f"New Volume: {self.volume}")
+        pygame.mixer.music.set_volume(self.volume/100.0)
+
+    def toggle_pause(self):
+        self.paused = not self.paused
+        print("Pause State :" + str(self.paused))
+        if (self.paused):
+            pygame.mixer.music.pause()
+        else:
+            pygame.mixer.music.unpause()
     
     def close(self):
         '''
         Raumt auf, wenn player gekillt wird.
         '''
         pygame.mixer.quit()
+
+    def play_next_song(self):
+        '''
+        Spielt einen zufaelligen Song aus der aktuellen playlist
+        '''
+        if self.playlist is not None:
+            file_name = random.choice(self.playlist)
+            path = os.path.join(self.PATH_TO_TRACKS, file_name)
+            print(f'Path to Next Song Track to play: "{path}"')
+            if self.paused:
+                self.toggle_pause()
+            else:
+                pygame.mixer.music.fadeout(self.FADE_TIME_MS)
+            pygame.mixer.music.load(path)
+            pygame.mixer.music.set_volume(self.volume/100.0)
+            pygame.mixer.music.play(loops=0, start=0.0, fade_ms = self.FADE_TIME_MS)
 
     def _update_playlist(self, emotion):
         '''
@@ -126,24 +199,11 @@ class PygamePlayer:
             return None
         print(f'The Song list is: "{tracks}"')
         self.playlist = tracks
-
-    def _play_next_song(self):
-        '''
-        Spielt einen zufaelligen Song aus der aktuellen playlist
-        '''
-        if self.playlist is not None:
-            file_name = random.choice(self.playlist)
-            path = os.path.join(self.PATH_TO_TRACKS, file_name)
-            print(f'Path to Next Song Track to play: "{path}"')
-            pygame.mixer.music.fadeout(self.FADE_TIME_MS)
-            pygame.mixer.music.load(path)
-            pygame.mixer.music.play(loops=0, start=0.0, fade_ms = self.FADE_TIME_MS)
         
 
 class AudioThread(threading.Thread): #Erbt von Thread
     #--Konstanten--
     DELAY = 0.1
-    VOLUME_STEP = 10
 
     def __init__(self, PlayerClass):
         '''
@@ -155,7 +215,6 @@ class AudioThread(threading.Thread): #Erbt von Thread
         self.new_emotion = None
         self.emotion = None
         self.killed = threading.Event()#Zum synchronisieren, damit darauf gewartet werden kann. 
-        self.volume = 100
 
     def run(self):
         '''
@@ -175,22 +234,6 @@ class AudioThread(threading.Thread): #Erbt von Thread
     def kill(self):
         self.killed.set()
 
-    def _decrease_volume(self):
-        print("vol down")
-        if (self.volume - self.VOLUME_STEP >= 0):
-            self.volume -= self.VOLUME_STEP
-        else:
-            print("Min volume")
-        print(f"New Volume: {self.volume}")
-
-    def _increase_volume(self):
-        print("vol up")
-        if (self.volume + self.VOLUME_STEP <= 100):
-            self.volume += self.VOLUME_STEP
-        else:
-            print("Max volume")
-        print(f"New Volume: {self.volume}")
-
     def _handle_queue(self):
         '''
         Kuemmert sich um die Nachrichten, welche aus der queue kommen und beachtet nur die letze.
@@ -199,9 +242,13 @@ class AudioThread(threading.Thread): #Erbt von Thread
             while True: #Lauft bis eine Exception fliegt (queue leer)
                 msg = self.queue.get(block=False, timeout=None)
                 if(msg == "+"):
-                    self._increase_volume()
+                    self.player.increase_volume()
                 elif(msg == "-"):
-                    self._decrease_volume()
+                    self.player.decrease_volume()
+                elif(msg == "toggle"):
+                    self.player.toggle_pause()
+                elif(msg  == "next"):
+                    self.player.play_next_song()
                 else:
                     self.new_emotion = msg
         except queue.Empty:
@@ -225,7 +272,6 @@ class AudioThread(threading.Thread): #Erbt von Thread
             self.emotion = self.new_emotion
             self.new_emotion = None
 
-        #TODO: Hier eine updateVolume Methode aufrufen? oder einen parameter an tick übergeben, welcher dann verarbeitet wird, falls dieser sich aendert 
         self.player.tick()
 
     def _sleep(self):
