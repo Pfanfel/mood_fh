@@ -1,0 +1,39 @@
+---
+# Bestimmt welcher Musikplayer geladen werden soll:
+# "pygame" für den lokalen Player
+# "spotify" für den Musik-Server-Player welcher mit Spotify verbunden ist.  
+player_type: pygame
+
+#Namen der Datenen welche im "tracks" Ordner liegen.
+pygame_playlists:
+
+  angry:
+  - "Simon Panrucker - Angry Dance.mp3"
+  disgusted:
+  
+  fearful:
+  
+  happy:
+  - "Ketsa - Good Vibe.mp3"
+  - "Ketsa - My happy place.mp3"
+  - "mixkit-oh-lord-200.mp3"
+  
+  neutral:
+  
+  sad:
+  - "applause-1.wav"
+  
+  surprised:
+
+#Die Playlists, welche bei der jew. Emotion abgespielt werden sollen.
+#Muessen in dem Format "<Playlistname> (by <Profilname>)" angegeben werden
+#Müssen sich außerdem in der Bibliothek des verknüpften Spotify-Accounts befinden. (Geherzt oder selber erstellt)
+spotify_playlists:
+
+  angry: 'angry music  (by alexkokosko)'
+  disgusted: 'DISGUSTED! (by shannonobrien6)'
+  fearful: 'Fear The Walking Dead: The Ultimate Soundtrack (by 11181446986)'
+  happy: 'Happy Hits! (by spotify)'
+  neutral: 'Background Music (by oxob2090gqlwewrx3xxjmnbf3)'
+  sad: 'Sad Songs 😢 for crying myself to sleep. (by sanik007)'
+  surprised: 'You & Me (by spotify)'
