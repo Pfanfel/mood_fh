@@ -1,30 +1,74 @@
 import serial
 import RPi.GPIO as GPIO
 import time
+import sys
+
+from pynput import keyboard
+from enum import Enum
 
 ser=serial.Serial("/dev/ttyACM0",9600)  #change ACM number as found from ls /dev/tty/ACM*
 ser.baudrate=9600
-def blink(pin):
-
-	GPIO.output(pin,GPIO.HIGH)  
-	time.sleep(1)  
-	GPIO.output(pin,GPIO.LOW)  
-	time.sleep(1)  
-	return
 
 GPIO.setmode(GPIO.BOARD)
 GPIO.setup(11, GPIO.OUT)
-while True:
 
-	#read_ser=ser.read()
-	#temp = int(read_ser)
-	#print(temp)
-	print("Hallo")
-	
-	print("Senden")
-		#blink(11)
+# Enum fuer verschiedene Emotionen 
+class Emotion(Enum):
+    NONE = 0
+    NEUTRAL = 1
+    HAPPY = 2
+    SAD = 3
+    ANGRY = 4
+    DISGUSTED = 5
+    FEARFUL = 6
+    SURPRISED = 7
+    
+# Angabe, ob die LEDs ausgeschaltet werden sollen 
+notFinish = True 
+# aktuelle Emotion
+emotion = Emotion.NEUTRAL
+animationOn = False
 
-	ser.write('5'.encode('ascii'))
-	#read_ser=ser.readline()
-	#temp = read_ser
-	#print(temp)
+# Callback fuer einen Tastendruck
+def on_release(key):
+    global emotion
+    # Beleuchtung der LEDs wird beendet
+    if key == keyboard.Key.esc:
+        emotion = Emotion.NONE
+        ser.write(('b\'' + str(emotion.value) + '\'').encode('ascii'))
+        global notFinish 
+        notFinish = False
+        # Stop listener
+        return False
+    # beim Druck der Leertaste wird zur naechsten Emotion gewechselt
+    if key == keyboard.Key.space:
+        if emotion.value == 7:
+            emotion = Emotion.NEUTRAL
+        else:
+            emotion = Emotion(emotion.value + 1)
+        
+        print(emotion)
+        return True
+        
+    if key == keyboard.Key.shift:
+        global animationOn
+        if (animationOn):
+            animationOn = False
+            ser.write(('F').encode('ascii'))
+        else:
+            animationOn = True
+            ser.write(('T').encode('ascii'))
+        print(animationOn)
+
+listener = keyboard.Listener(
+    on_release=on_release)
+listener.start()
+
+while notFinish:
+
+    if(ser.in_waiting >0):
+        line = ser.readline()
+        print(line) 
+    ser.write(('b\'' + str(emotion.value) + '\'').encode('ascii'))
+    
+sys.exit()
