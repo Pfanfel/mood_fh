@@ -44,7 +44,7 @@ class MainTest:
     def _create_audio_thread(self, playertype):
         if (playertype == 'pygame'):
             return AudioThread(PygamePlayer)
-        elif (playertype == 'mopidy'):
+        elif (playertype == 'spotify'):
             return AudioThread(MopidyPlayer)
         else:
             print('Valid playertypes in config are: "pygame" and "mopidy"')

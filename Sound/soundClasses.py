@@ -11,7 +11,7 @@ from piripherals import MPD
 class MopidyPlayer:
     #--Konstanten--
     PATH_TO_SOURCE = os.path.abspath(os.path.dirname( __file__ ))
-    PATH_TO_CONFIG = os.path.join(PATH_TO_SOURCE, "spotifyPlaylists.yaml")
+    PATH_TO_CONFIG = os.path.join(PATH_TO_SOURCE, "soundConfig.yaml")
     VOLUME_STEP = 10
     
     def __init__(self):
@@ -52,6 +52,9 @@ class MopidyPlayer:
         self.c.stop()
 
     def decrease_volume(self):
+        '''
+        Verringert die Lautstärke.
+        '''
         if (self.volume - self.VOLUME_STEP >= 0):
             self.volume -= self.VOLUME_STEP
         else:
@@ -61,6 +64,9 @@ class MopidyPlayer:
         print(self.c.status())
 
     def increase_volume(self):
+        '''
+        Erhoeht die Lautstärke.
+        '''
         if (self.volume + self.VOLUME_STEP <= 100):
             self.volume += self.VOLUME_STEP
         else:
@@ -70,9 +76,15 @@ class MopidyPlayer:
         print(self.c.status())
 
     def toggle_pause(self):
+        '''
+        Pausiert bzw. setzt den aktuell gespielten Song fort.
+        '''
         self.c.toggle_play()
 
     def play_next_song(self):
+        '''
+        Spielt den naechsten Song in der Playlist ab.
+        '''
         if (self.c.state() == "pause"):
             self.c.toggle_play()
         self.c.next()
@@ -85,7 +97,8 @@ class MopidyPlayer:
         with open(self.PATH_TO_CONFIG, "r") as t:
             config = yaml.safe_load(t)
         try:
-            playlist = config[emotion]
+            print(config)
+            playlist = config['spotify_playlists'][emotion]
         except KeyError:
             print(f'The Emotion "{emotion}"  does not exist')
             return None
@@ -98,7 +111,7 @@ class PygamePlayer:
     #--Konstanten--
     PATH_TO_SOURCE = os.path.abspath(os.path.dirname( __file__ ))
     PATH_TO_TRACKS = os.path.join(PATH_TO_SOURCE, "tracks")
-    PATH_TO_CONFIG = os.path.join(PATH_TO_SOURCE, "pygamePlaylists.yaml")
+    PATH_TO_CONFIG = os.path.join(PATH_TO_SOURCE, "soundConfig.yaml")
     FADE_TIME_MS = 500 #Fuer fade in und fade out genutzt (fade dauert also FADE_TIME_MS*2)
     VOLUME_STEP = 10 #Sollte %100 == 0 sein
     
@@ -140,6 +153,9 @@ class PygamePlayer:
         self.play_next_song()
 
     def decrease_volume(self):
+        '''
+        Verringert die Lautstärke.
+        '''
         if (self.volume - self.VOLUME_STEP >= 0):
             self.volume -= self.VOLUME_STEP
         else:
@@ -149,6 +165,9 @@ class PygamePlayer:
     
 
     def increase_volume(self):
+        '''
+        Erhoeht die Lautstärke.
+        '''
         if (self.volume + self.VOLUME_STEP <= 100):
             self.volume += self.VOLUME_STEP
         else:
@@ -157,6 +176,9 @@ class PygamePlayer:
         pygame.mixer.music.set_volume(self.volume/100.0)
 
     def toggle_pause(self):
+        '''
+        Pausiert bzw. setzt den aktuell gespielten Song fort.
+        '''
         self.paused = not self.paused
         print("Pause State :" + str(self.paused))
         if (self.paused):
@@ -193,7 +215,7 @@ class PygamePlayer:
         with open(self.PATH_TO_CONFIG, "r") as t:
             config = yaml.safe_load(t)
         try:
-            tracks = config[emotion]
+            tracks = config['pygame_playlists'][emotion]
         except KeyError:
             print(f'The Emotion "{emotion}"  does not exist')
             return None
