@@ -54,10 +54,8 @@ def on_release(key):
         global animationOn
         if (animationOn):
             animationOn = False
-            ser.write(('F').encode('ascii'))
         else:
             animationOn = True
-            ser.write(('T').encode('ascii'))
         print(animationOn)
 
 listener = keyboard.Listener(
@@ -70,5 +68,10 @@ while notFinish:
         line = ser.readline()
         print(line) 
     ser.write(('b\'' + str(emotion.value) + '\'').encode('ascii'))
+    
+    if (animationOn):
+        ser.write(('T').encode('ascii'))
+    else:
+        ser.write(('F').encode('ascii'))
     
 sys.exit()
