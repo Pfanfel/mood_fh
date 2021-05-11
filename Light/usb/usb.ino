@@ -17,6 +17,18 @@
 
 CRGB leds[NUM_LEDS];
 
+uint8_t colorIndex[NUM_LEDS];
+
+DEFINE_GRADIENT_PALETTE( greenblue_gp ) { 
+  0,   0,  255, 245,
+  46,  0,  21,  255,
+  179, 12, 250, 0,
+  255, 0,  255, 245
+};
+
+CRGBPalette16 greenblue = greenblue_gp;
+
+
 /**
    Angabe, ob Animatation angezeigt werden soll
 */
@@ -58,7 +70,22 @@ typedef enum {
 } Emotion;
 
 static Emotion emotion = NONE;
+
+static void drawTest() {
+  //Creat a sin wave with period of 2 seconds (30bpm) to change the brightness of the strip
+  uint8_t sinBeat = beatsin8(30, 50, 255, 0, 0);
   
+  // Color each pixel from the palette using the index from colorIndex[]
+  for (int i = 0; i < NUM_LEDS; i++) {
+    leds[i] = ColorFromPalette(greenblue, colorIndex[i], sinBeat);
+  }
+  
+  EVERY_N_MILLISECONDS(5){
+    for (int i = 0; i < NUM_LEDS; i++) {
+      colorIndex[i]++;
+    }
+  }
+}
 
 static void drawFirework() {
 
@@ -88,7 +115,7 @@ byte nSparks = 30;
     // Spark
     for (int x = 0; x < nSparks; x++) {
     sparkPos[x] = sparkPos[x] + (sparkVel[x] >> 5); // adjust speed of sparks here
-    //sparkPos[x] = constrain(sparkPos[x], 0, maxPos);
+    sparkPos[x] = constrain(sparkPos[x], 0, maxPos);
     sparkHeat[x] = scale16(sparkHeat[x], 64000); // adjust speed of cooldown here
 
    CRGB color;
@@ -150,10 +177,10 @@ static void drawGlitter() {
   delay(20);
 }
 
-static void DrawComet()
+static void drawComet()
 {
   const byte fadeAmt = 128;
-  const int cometSize = 5;
+  const int cometSize = 30;
   const int deltaHue  = 4;
 
   static byte hue = HUE_RED;
@@ -166,15 +193,19 @@ static void DrawComet()
   if (iPos == (NUM_LEDS - cometSize) || iPos == 0)
     iDirection *= -1;
 
+ // if (iPos == ((NUM_LEDS + 1) - cometSize))
+  //  iPos = 0;
+
   for (int i = 0; i < cometSize; i++)
     leds[iPos + i].setHue(hue);
+   //leds[iPos + i] = CHSV(hue, 255, (100/cometSize) * i);
 
   // Randomly fade the LEDs
   for (int j = 0; j < NUM_LEDS; j++)
     if (random(10) > 5)
       leds[j] = leds[j].fadeToBlackBy(fadeAmt);
 
-  delay(30);
+  delay(20);
 }
 
 void setup() {
@@ -183,6 +214,11 @@ void setup() {
   FastLED.addLeds<LED_TYPE, DATA_PIN, CLOCK_PIN, COLOR_ORDER>(leds, NUM_LEDS).setCorrection( TypicalLEDStrip );
 
   FastLED.setBrightness(  BRIGHTNESS );
+
+    //Fill the colorIndex array with random numbers
+  for (int i = 0; i < NUM_LEDS; i++) {
+    colorIndex[i] = random8();
+  }
 
 }
 
@@ -199,7 +235,7 @@ static void illuminateNeutral() {
 
 static void illuminateHappy() {
   if (animationOn) {
-    DrawComet();
+    drawComet();
   }
   else {
     fill_solid(leds, NUM_LEDS, CRGB(224, 80, 0));
