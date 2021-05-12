@@ -17,17 +17,6 @@
 
 CRGB leds[NUM_LEDS];
 
-uint8_t colorIndex[NUM_LEDS];
-
-DEFINE_GRADIENT_PALETTE( greenblue_gp ) { 
-  0,   0,  255, 245,
-  46,  0,  21,  255,
-  179, 12, 250, 0,
-  255, 0,  255, 245
-};
-
-CRGBPalette16 greenblue = greenblue_gp;
-
 
 /**
    Angabe, ob Animatation angezeigt werden soll
@@ -39,7 +28,6 @@ uint16_t animateSpeed = 100;            //Number of frames to increment per loop
 uint8_t  animation = 10;    //Active animation
 uint8_t brightness = 50;
 
-uint8_t gHue = 0;
 uint8_t paletteIndex = 0;
 
 CRGBPalette16  lavaPalette = CRGBPalette16(
@@ -70,22 +58,6 @@ typedef enum {
 } Emotion;
 
 static Emotion emotion = NONE;
-
-static void drawTest() {
-  //Creat a sin wave with period of 2 seconds (30bpm) to change the brightness of the strip
-  uint8_t sinBeat = beatsin8(30, 50, 255, 0, 0);
-  
-  // Color each pixel from the palette using the index from colorIndex[]
-  for (int i = 0; i < NUM_LEDS; i++) {
-    leds[i] = ColorFromPalette(greenblue, colorIndex[i], sinBeat);
-  }
-  
-  EVERY_N_MILLISECONDS(5){
-    for (int i = 0; i < NUM_LEDS; i++) {
-      colorIndex[i]++;
-    }
-  }
-}
 
 static void drawFirework() {
 
@@ -134,7 +106,7 @@ static void drawForwardBackward() {
   uint8_t BeatsPerMinute = 62;
   uint8_t beat = beatsin8( BeatsPerMinute, 64, 255);
   for ( int i = 0; i < NUM_LEDS; i++) { //9948
-    leds[i] = ColorFromPalette(lavaPalette, gHue + (i * 2), beat - gHue + (i * 10));
+    leds[i] = ColorFromPalette(lavaPalette, (i * 2), beat - (i * 10));
   }
 }
 
@@ -170,7 +142,6 @@ static void drawTwinkles() {
 static void drawGlitter() {
   // built-in FastLED rainbow, plus some random sparkly glitter
 
-  //addGlitter(80);
   fadeToBlackBy( leds, NUM_LEDS, 15);
   int pos = random16(NUM_LEDS);
   leds[pos] += CRGB::White;
@@ -193,12 +164,8 @@ static void drawComet()
   if (iPos == (NUM_LEDS - cometSize) || iPos == 0)
     iDirection *= -1;
 
- // if (iPos == ((NUM_LEDS + 1) - cometSize))
-  //  iPos = 0;
-
   for (int i = 0; i < cometSize; i++)
     leds[iPos + i].setHue(hue);
-   //leds[iPos + i] = CHSV(hue, 255, (100/cometSize) * i);
 
   // Randomly fade the LEDs
   for (int j = 0; j < NUM_LEDS; j++)
@@ -214,11 +181,6 @@ void setup() {
   FastLED.addLeds<LED_TYPE, DATA_PIN, CLOCK_PIN, COLOR_ORDER>(leds, NUM_LEDS).setCorrection( TypicalLEDStrip );
 
   FastLED.setBrightness(  BRIGHTNESS );
-
-    //Fill the colorIndex array with random numbers
-  for (int i = 0; i < NUM_LEDS; i++) {
-    colorIndex[i] = random8();
-  }
 
 }
 
@@ -295,8 +257,6 @@ static void illuminateSurprised() {
 }
 
 void loop() {
-  //if (Serial.available()) {
-  /* TODO korrektes Einlesen */
   char temp = Serial.read();
   if (temp == 'F') {
     animationOn = 0;
