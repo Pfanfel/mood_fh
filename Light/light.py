@@ -34,14 +34,9 @@ def on_release(key):
     global emotion
     
     # Beleuchtung der LEDs wird beendet
-    if key == keyboard.Key.esc:
+    if key == keyboard.Key.alt:
         emotion = Emotion.NONE
-        # Arduino mitteilen, dass Programm beendet wird
-        ser.write(('b\'' + str(emotion.value) + '\'').encode('ascii'))
-        global finish 
-        finish = True
-        # Stop listener
-        return False
+        return True
         
     # Beim Druck der Leertaste wird zur naechsten Emotion gewechselt
     if key == keyboard.Key.space:
@@ -53,6 +48,14 @@ def on_release(key):
         
         print(emotion)
         return True
+        
+    # Angabe, dass das Programm beendet wird
+    if key == keyboard.Key.esc:
+        global finish
+        finish = True
+        
+        # Stop listener
+        return False
         
     # Beim Druck der Shifttaste wird zur Animation/Farbe gewechselt
     if key == keyboard.Key.shift:
