@@ -41,9 +41,7 @@ CRGB leds[NUM_LEDS];
  */
 static uint8_t animationOn = 0;
 
-uint16_t frame = 0;      //I think I might be able to move this variable to the void loop() scope and save some CPU
-uint16_t animateSpeed = 100;            //Number of frames to increment per loop
-uint8_t paletteIndex = 0;
+static uint16_t frame = 0;
 
 /**
  * Farbwerte fuer die Palette setzen
@@ -71,11 +69,12 @@ CRGBPalette16 disgustedPal = Sunset_gp;
 static void drawWave() {
   FastLED.clear();
   uint8_t value = 0;
+  static const uint32_t MAX_VAL = 65536;
   
   /* LEDs durchlaufen und farbwert ermitteln */
   for (uint8_t i = 0; i < NUM_LEDS; i++) {
     /* Neuen Farbwert ermitteln */
-    value = (sin16(frame + ((65536 / NUM_LEDS) * i)) + (65536 / 2)) / 256;
+    value = (sin16(frame + ((MAX_VAL / NUM_LEDS) * i)) + (MAX_VAL / 2)) / 256;
     
     /* Aktuelle LED auf Farbwert setzen, wenn dieser gueltig ist */
     if (value >= 0) {
@@ -88,6 +87,7 @@ static void drawWave() {
  * Setzt die LEDs auf die angebenen Animation/Farbwerte fuer die Emotion Neutral
  */
 static void illuminateNeutral() {
+  static const uint16_t ANIMATE_SPEED = 100; 
   /* Pruefen, ob die LEDs animiert werden sollen */
   if (animationOn) {
     drawWave();
@@ -97,16 +97,16 @@ static void illuminateNeutral() {
     fill_solid(leds, NUM_LEDS, CRGB(138, 30, 0));
   }
   FastLED.show();
-  frame += animateSpeed;
+  frame += ANIMATE_SPEED;
 }
 
 /**
  * Animiert die LEDs wie einen bunten Kometen mit Richtungswechsel.
  */
 static void drawComet() {
-  #define FADE_AMOUNT 128
-  #define COMET_SIZE 30
-  #define DELTA_HUE 4
+  static const uint8_t FADE_AMOUNT = 128;
+  static const uint8_t COMET_SIZE = 30;
+  static const uint8_t DELTA_HUE = 4;
 
   static uint8_t hue = HUE_RED;
   static int dir = 1;
@@ -188,9 +188,10 @@ static void illuminateSad() {
  * Animiert die LEDs als pulsierenden Ring, der sich vor und zurueck bewegt.
  */
 static void drawForwardBackward() {
-  // colored stripes pulsing at a defined Beats-Per-Minute (BPM)
-  #define BeatsPerMinute 62
-  uint8_t beat = beatsin8( BeatsPerMinute, 64, 255);
+  /* Angabe der BPM zu denen die LEDs pulsieren */
+  static const uint8_t BPM = 62;
+  uint8_t beat = beatsin8(BPM, 64, 255);
+  /* LEDs durchlaufen und Farbwert anpassen */
   for (uint8_t i = 0; i < NUM_LEDS; i++) {
     leds[i] = ColorFromPalette(LavaColors_p, (i * 2), beat - (i * 10));
   }
@@ -211,11 +212,17 @@ static void illuminateAngry() {
   FastLED.show();
 }
 
+/**
+ * Animiert die LEDs mit einem weichen Farbverlauf in den Farben eines Sonnenuntergangs.
+ */
 static void drawSunset() {
-  fill_palette(leds, NUM_LEDS, paletteIndex, 255 / NUM_LEDS, disgustedPal, 255, LINEARBLEND);
+  static uint8_t disgustedPalIdx = 0;
+  /* Aendert den Farbewert der LEDs zu der Farbe, die ueber den passenden Index der Palette erreicht wird */
+  fill_palette(leds, NUM_LEDS, disgustedPalIdx, 255 / NUM_LEDS, disgustedPal, 255, LINEARBLEND);
 
   EVERY_N_MILLISECONDS(10) {
-    paletteIndex++;
+    /* Farbwert veraendern, in dem der Indes der Palette weiter gesetzt wird */
+    disgustedPalIdx++;
   }
 }
 
@@ -235,51 +242,64 @@ static void illuminateDisgusted() {
 }
 
 /**
- * Animiert die LEDs explosionsartig.
+ * Sorgt dafuer, dass die angegebene Schrittgroesse den Wertebereich nicht verlaesst
+ * 
+ * @param step Schrittgroesse die den Wertebereich nicht verlassen soll
+ * @return geclampte neue Schrittgroesse
  */
-static void drawFirework() {
+static uint8_t wrap(uint8_t step) {
+  uint8_t newStep = step;
+  if (newStep < 0) {
+    newStep = NUM_LEDS + step;
+  }
+  if (newStep > NUM_LEDS - 1) {
+    newStep = step - NUM_LEDS;
+  }
+  return newStep;
+}
 
-  /* max. Anzahl der Funken */
-  #define NUM_SPARKS 48
+/**
+ * Animiert die LEDs mit einer Hintergrundfarbe und zufaellig bewegten LEDs.
+ */
+static void drawRipple() {
+  static const uint8_t COLOR = 205;
+  static const uint8_t MAX_STEPS = 16;
+  static const float FADE_AMOUNT = 0.8;
+  static uint8_t center = 0;
+  static uint8_t step = 0;
 
-  #define MAX_POS ((NUM_LEDS - 1) * 128)
+  /* Hintergrundfarbe der LEDs setzen */
+  fill_solid(leds, NUM_LEDS, CHSV(110, 255, 100));   
 
-  int sparkPos[NUM_SPARKS] ;
-  int sparkVel[NUM_SPARKS] ;
-  int sparkHeat[NUM_SPARKS];
+  /* Neuen zufaelligen Startpunkt fuer die andersfarbigen LEDs ermitteln */
+  if (step == 0) {
+    center = random(NUM_LEDS);
+    leds[center] = CHSV(COLOR, 255, 255); 
+    step++;
+  } 
   
-  EVERY_N_MILLIS(30) {
-    // Shoot
-      if (random(1100) < 10) {
-
-    int flarePos = random(20, NUM_LEDS - 20);
+  else {
     
-    // initialize sparks
-    for (int x = 0; x < NUM_SPARKS; x++) {
-      sparkPos[x] = flarePos << 7;
-      sparkVel[x] = random16(0, 5120) - 2560; // velocitie original -1 o 1 now -255 to + 255
-      word sph = abs(sparkVel[x]) << 2;
-      if (sph > 2550) sph = 2550; // set heat before scaling velocity to keep them warm heat is 0-500 but then clamped to 255
-      sparkHeat[x] = sph ;
+    /* Wenn die bewegten LEDs noch nicht maximale Entfernung zum Startpunkt erreicht haben */
+    if (step < MAX_STEPS) {
+      uint8_t counter = 1;
+      uint8_t index = step;
+
+      /* Farbwert der bewegten LEDs ermitteln */
+      while (index > 0) {
+        leds[wrap(center + step - counter)] = CHSV(COLOR, 0, pow(FADE_AMOUNT, step - (counter - 1))*255);     //   strip.setPixelColor(wrap(center + step - 3), Wheel(color, pow(fadeRate, step - 2)));
+        leds[wrap(center - step + counter)] = CHSV(COLOR, 0, pow(FADE_AMOUNT, step - (counter - 1))*255); 
+        counter += 2;  
+        index--;  
+        delay(10);  
+      }
+      step++;
+    } 
+    
+    else {
+      step = 0;
     }
-    sparkHeat[0] = 5000; // this will be our known spark
   }
-  }
-  EVERY_N_MILLIS(15) {
-    // Spark
-    for (int x = 0; x < NUM_SPARKS; x++) {
-    sparkPos[x] = sparkPos[x] + (sparkVel[x] >> 5); // adjust speed of sparks here
-    sparkPos[x] = constrain(sparkPos[x], 0, MAX_POS);
-    sparkHeat[x] = scale16(sparkHeat[x], 64000); // adjust speed of cooldown here
-
-   CRGB color = ColorFromPalette(ForestColors_p, scale16(sparkHeat[x], 6600));
-
-    leds[sparkPos[x] >> 7] += color;
-  }
-  }
-
-  delay(5);
-  fadeToBlackBy(leds, NUM_LEDS, 80);
 }
 
 /**
@@ -288,7 +308,7 @@ static void drawFirework() {
 static void illuminateFearful() {
   /* Pruefen, ob die LEDs animiert werden sollen */
   if (animationOn) {
-    drawFirework();
+    drawRipple();
   }
   else {
     /* LEDs auf angegebenen Farbwert setzen */
@@ -346,7 +366,7 @@ void loop() {
 
   /* Pruefen, ob die gespeicherte Zahl einer Emotion entspricht */
   if ((emotion != temp) && (temp >= 0) && (temp < 8)) {
-    emotion = temp;
+    emotion = (Emotion) temp;
   }
 
   /* Je nach Emotion, Farbe oder Animation der LEDs anpassen */
