@@ -57,9 +57,27 @@ DEFINE_GRADIENT_PALETTE( Sunset_gp ) {
 };
 
 /**
+ * Farbwerte fuer die Palette setzen
+ */
+DEFINE_GRADIENT_PALETTE( Angry_gp ) {
+  0, 210, 11, 24,
+  22, 255, 0,  0,
+  51, 163, 6,  6,
+  85, 121, 9, 9,
+  135, 255,  61, 12,
+  198,  255,  84, 0,
+  255,  245,  229, 70
+};
+
+/**
  * Farbpalette fuer die Animation von Disgusted
  */
 CRGBPalette16 disgustedPal = Sunset_gp;
+
+/**
+ * Farbpalette fuer die Animation von Angry
+ */
+CRGBPalette16 angryPal = Angry_gp;
 
 /*----------------------------Animation und Farbangaben---------------------------------*/
 
@@ -193,7 +211,7 @@ static void drawForwardBackward() {
   uint8_t beat = beatsin8(BPM, 64, 255);
   /* LEDs durchlaufen und Farbwert anpassen */
   for (uint8_t i = 0; i < NUM_LEDS; i++) {
-    leds[i] = ColorFromPalette(LavaColors_p, (i * 2), beat - (i * 10));
+    leds[i] = ColorFromPalette(angryPal, (i * 2), beat - (i * 10));
   }
 }
 
