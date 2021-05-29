@@ -81,7 +81,7 @@ switcher = {
 
 def main():
     # Select input device
-    dev = InputDevice('/dev/input/event0')
+    dev = InputDevice('/dev/input/event2')
     # Start event loop
     for event in dev.read_loop():
         # Key event
