@@ -70,7 +70,7 @@ class EmotionDetection:
                 cv2.putText(frame, self.emotion_dict[maxindex], (x+20, y-60), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
             cv2.namedWindow('EmotionDetection', cv2.WND_PROP_FULLSCREEN)
             cv2.setWindowProperty('EmotionDetection',cv2.WND_PROP_FULLSCREEN,1)
-            cv2.imshow('EmotionDetection', cv2.resize(frame, (1920, 1080), interpolation=cv2.INTER_CUBIC))
+            cv2.imshow('EmotionDetection', cv2.resize(frame, (800, 480), interpolation=cv2.INTER_CUBIC))
             cv2.waitKey(1)
         cap.release()
         cv2.destroyAllWindows()
