@@ -60,7 +60,7 @@ class MainTest:
                     if func != "nothing":
                         func()
     
-    def send(self, emotion):
+    def send_audio(self, emotion):
         self.audioThread.send_emotion(emotion)
 
     def kill_threads(self):
@@ -102,7 +102,8 @@ class MainTest:
         f = open(self.PATH_TO_TEXTFILE, "a")
         f.write("Animation On")
         f.close()
-
+        
+        # TODO rausnehmen (auch aus der key.conf)
     def soundOff(self):
         print("Sound Off")
         f = open(self.PATH_TO_TEXTFILE, "a")
@@ -120,24 +121,28 @@ class MainTest:
         f = open(self.PATH_TO_TEXTFILE, "a")
         f.write("Toggle Pause")
         f.close()
+        self.send_audio("toggle")
 
     def nextSong(self):
         print("Next Song")
         f = open(self.PATH_TO_TEXTFILE, "a")
         f.write("Next Song")
         f.close()
+        self.send_audio("next")
 
     def volumeUp(self):
         print("Volume Up")
         f = open(self.PATH_TO_TEXTFILE, "a")
         f.write("Volume Up")
         f.close()
+        self.send_audio("+")
 
     def volumeDown(self):
         print("Volume Down")
         f = open(self.PATH_TO_TEXTFILE, "a")
         f.write("Volume Down")
         f.close()
+        self.send_audio("-")
 
     def detectEmotion(self):
         print("Emotionserkennung gestartet!")
@@ -146,7 +151,7 @@ class MainTest:
         f.close()
         emotion = self.emotionDetection.play()
         print(emotion)
-        self.send(emotion)
+        self.send_audio(emotion)
 
 
 #-----------------------------------------------------------------------
