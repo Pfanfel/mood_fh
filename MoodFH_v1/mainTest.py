@@ -7,6 +7,7 @@ import evdev
 from evdev import InputDevice, categorize, ecodes
 from emotionClass import EmotionDetection
 from soundClasses import AudioThread, MopidyPlayer, PygamePlayer
+from light import LightThread
 
 class MainTest:
 
@@ -19,6 +20,8 @@ class MainTest:
         playertype = self._load_playertype()
         # Create AudioThread
         self.audioThread = self._create_audio_thread(playertype)
+        # Create LightThread
+        self.lightThread = LightThread()
         # Create EmotionDetection instance
         self.emotionDetection = EmotionDetection()
         # Select input device
@@ -48,6 +51,12 @@ class MainTest:
         else:
             print('Could not create audio thread')
 
+    def start_light_thread(self):
+        if self.lightThread is not None:
+            self.lightThread.start()
+        else:
+            print('Could not create light thread')
+
     def start_loop(self):
         # Start event loop
         for event in self.dev.read_loop():
@@ -56,16 +65,22 @@ class MainTest:
                 data = categorize(event)
                 # Button down (not up) event
                 if data.keystate == 1:
+                    print(str(data.keycode))
                     func = self.switcher.get(str(data.keycode), "nothing")
                     if func != "nothing":
                         func()
     
     def send_audio(self, emotion):
         self.audioThread.send_emotion(emotion)
-
+        
+    def send_light(self, emotion):
+        self.lightThread.send_emotion(emotion)
+        
     def kill_threads(self):
         self.audioThread.kill()
+        self.lightThread.kill()
         self.audioThread.join()
+        self.lightThread.join()
 
     def _load_playertype(self):
         with open(self.PATH_TO_CONFIG, "r") as t:
@@ -96,12 +111,14 @@ class MainTest:
         f = open(self.PATH_TO_TEXTFILE, "a")
         f.write("Animation Off")
         f.close()
-
+        self.send_light("false")
+        
     def animationOn(self):
         print("Animation On")
         f = open(self.PATH_TO_TEXTFILE, "a")
         f.write("Animation On")
         f.close()
+        self.send_light("true")
         
         # TODO rausnehmen (auch aus der key.conf)
     def soundOff(self):
@@ -122,6 +139,7 @@ class MainTest:
         f.write("Toggle Pause")
         f.close()
         self.send_audio("toggle")
+        self.send_light("toggle")
 
     def nextSong(self):
         print("Next Song")
@@ -152,6 +170,7 @@ class MainTest:
         emotion = self.emotionDetection.play()
         print(emotion)
         self.send_audio(emotion)
+        self.send_light(emotion)
 
 
 #-----------------------------------------------------------------------
@@ -160,6 +179,7 @@ if __name__ == "__main__":
     try:
         m = MainTest()
         m.start_audio_thread()
+        m.start_light_thread()
         m.start_loop()
         print("mit python ausfuehren und in der interaktiven Shell mit m.send(\"<Emotion>\") die Emotion steuern")
         code.interact(local=globals()) #Startet die interactive shell zum testen.

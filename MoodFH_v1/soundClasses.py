@@ -1,7 +1,7 @@
 import time
 import queue
 import threading
-import os,sys
+import os
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide" #Damit nicht immer die pygame Message kommt
 import pygame
 import yaml
@@ -302,9 +302,6 @@ class AudioThread(threading.Thread): #Erbt von Thread
         '''
         self.killed.wait(timeout=max(0, self.next_tick - time.time()))
 
-
-
-    #----Methode zum testen-----
     def send_emotion (self, emotion):
         self.queue.put(emotion)
 
