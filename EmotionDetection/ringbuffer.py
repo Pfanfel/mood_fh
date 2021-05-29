@@ -1,4 +1,5 @@
 from collections import deque
+import statistics
 
 class RingBuffer(deque):
     """
@@ -26,5 +27,4 @@ class RingBuffer(deque):
 
     def getMode(self):
         """returns the most common item"""
-        elementList =list(self)
-        return max(set(elementList), key =elementList.count)
+        return statistics.mode(list(self))

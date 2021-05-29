@@ -305,7 +305,7 @@ static void drawRipple() {
 
       /* Farbwert der bewegten LEDs ermitteln */
       while (index > 0) {
-        leds[wrap(center + step - counter)] = CHSV(COLOR, 0, pow(FADE_AMOUNT, step - (counter - 1))*255);     //   strip.setPixelColor(wrap(center + step - 3), Wheel(color, pow(fadeRate, step - 2)));
+        leds[wrap(center + step - counter)] = CHSV(COLOR, 0, pow(FADE_AMOUNT, step - (counter - 1))*255);     
         leds[wrap(center - step + counter)] = CHSV(COLOR, 0, pow(FADE_AMOUNT, step - (counter - 1))*255); 
         counter += 2;  
         index--;  
