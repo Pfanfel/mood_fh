@@ -44,12 +44,13 @@ Das virtual environment deaktivieren:
 Beim Hinzufügen von neuen Packages in das venv muss die requirements.txt aktualisiert werden
 
 `pip freeze -l > requirements.txt # or --local instead of -l`
+
 ## Anforderungen
 
 ### Gesichtserkennung
 
 Über die Kamera des PI’s soll die Umgebung laufend gefilmt werden. Dabei soll in dem Kamerabild ein Gesicht gesucht werden, um dessen Emotion zu erkennen.
-Bei der Emotion handelt  es sich um ein Element aus einer vordefinierten Menge. Diese Emotion wird an ein weiteres Modul weitergereicht, welches sich um die Musik und Lichtstimmung im Raum kümmert.
+Bei der Emotion handelt es sich um ein Element aus einer vordefinierten Menge. Diese Emotion wird an ein weiteres Modul weitergereicht, welches sich um die Musik und Lichtstimmung im Raum kümmert.
 Als zusätzliches Feature wäre denkbar ein Foto über eine Webseite hochzuladen, welche aus dem lokalen Netz heraus erreichbar wäre. Dieses könnte dann ebenfalls von dem Gesichtserkennungs-Modul verarbeitet werden.
 
 ### Musik
