@@ -17,12 +17,17 @@ pygame_playlists:
   - "Ketsa - Good Vibe.mp3"
   - "Ketsa - My happy place.mp3"
   - "mixkit-oh-lord-200.mp3"
-  
+  - "Jendrik - I Don't Feel Hate.mp3"
+  - "Mark Ronson - Uptown Funk (feat. Bruno Mars).mp3"
+  - "Pharrell Williams - Happy - From 'Despicable Me 2'.mp3"
   neutral:
   
   sad:
-  - "applause-1.wav"
-  
+  - "A Great Big World, Christina Aguilera - Say Something.mp3"
+  - "Coldplay - Fix You.mp3"
+  - "Maggie Rogers - Past Life.mp3"
+  - "Tate McRae - you broke me first.mp3"
+  - "Valera - Everything.mp3"
   surprised:
 
 #Die Playlists, welche bei der jew. Emotion abgespielt werden sollen.
