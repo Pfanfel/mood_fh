@@ -3,19 +3,7 @@ import time
 import os
 import queue
 import threading
-
-from enum import Enum
-
-# Enum fuer verschiedene Emotionen 
-class Emotion(Enum):
-    NONE = 0
-    NEUTRAL = 1
-    HAPPY = 2
-    SAD = 3
-    ANGRY = 4
-    DISGUSTED = 5
-    FEARFUL = 6
-    SURPRISED = 7
+from emotionEnum import Emotion
 
 class LightThread(threading.Thread): #Erbt von Thread
     #--Konstanten--
@@ -69,26 +57,8 @@ class LightThread(threading.Thread): #Erbt von Thread
                     self.animationOn = True
                 elif(msg == "toggle"):
                     self.pause = not self.pause
-                elif(msg == "Angry"):
-                    self.pause = False
-                    self.emotion = Emotion.ANGRY
-                elif(msg == "Disgusted"):
-                    self.pause = False
-                    self.emotion = Emotion.DISGUSTED
-                elif(msg == "Fearful"):
-                    self.pause = False
-                    self.emotion = Emotion.FEARFUL
-                elif(msg == "Happy"):
-                    self.pause = False
-                    self.emotion = Emotion.HAPPY
-                elif(msg == "Neutral"):
-                    self.pause = False
-                    self.emotion = Emotion.NEUTRAL
-                elif(msg == "Sad"):
-                    self.pause = False
-                    self.emotion = Emotion.SAD
                 else:
-                    self.emotion = Emotion.SURPRISED
+                    self.emotion = msg
         except queue.Empty:
             pass
 
