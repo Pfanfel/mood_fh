@@ -38,9 +38,7 @@ class EmotionDetection:
         self.model.add(Dropout(0.5))
         self.model.add(Dense(7, activation='softmax'))
         self.model.load_weights(self.PATH_TO_MODEL)
-        # create EmotionDict
-        self.emotion_dict = {0: "Angry", 1: "Disgusted", 2: "Fearful",
-                             3: "Happy", 4: "Neutral", 5: "Sad", 6: "Surprised"}
+
         # prevents openCL usage and unnecessary logging messages
         cv2.ocl.setUseOpenCL(False)
 
@@ -75,11 +73,5 @@ class EmotionDetection:
         cap.release()
         cv2.destroyAllWindows()
         if emotionCount == self.QUEUE_SIZE:
-            print("Emotion erkannt: ")
-            f = open(self.PATH_TO_TEXTFILE, "a")
-            f.write("Emotion erkannt: ")
-            f.write(self.emotion_dict[self.ring.getMode()])
-            f.close()
-            print(self.emotion_dict[self.ring.getMode()])
-            return self.emotion_dict[self.ring.getMode()]
+            return (self.ring.getMode() + 1)
         return None
