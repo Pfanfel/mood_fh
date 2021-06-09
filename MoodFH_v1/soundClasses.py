@@ -7,6 +7,7 @@ import pygame
 import yaml
 import random
 from piripherals import MPD
+from emotionEnum import Emotion
 
 class MopidyPlayer:
     #--Konstanten--
@@ -34,7 +35,8 @@ class MopidyPlayer:
         '''
         Spielt eine Playlist gegeben einer Emotion im shuffle Modus.
         '''
-        emotion = emotion.lower()
+        enumValue = Emotion(emotion)
+        emotion = str(enumValue.name).lower()
         playlist = self._load_playlist(emotion)
         if playlist is not None:
             self.c.clear()
@@ -146,7 +148,8 @@ class PygamePlayer:
         '''
         Spielt eine Playlist gegeben einer Emotion ab.
         '''
-        emotion = emotion.lower()
+        enumValue = Emotion(emotion)
+        emotion = str(enumValue.name).lower()
         #Setze neue Playlist
         self._update_playlist(emotion)
         #Starte die Playlist
