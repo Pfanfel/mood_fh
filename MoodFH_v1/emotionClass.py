@@ -8,13 +8,13 @@ from tensorflow.keras.layers import (Conv2D, Dense, Dropout, Flatten,
                                      MaxPooling2D)
 from tensorflow.keras.models import Sequential
 from ringbuffer import RingBuffer
+from emotionEnum import Emotion
 
 class EmotionDetection:
 
     PATH_TO_SOURCE = os.path.abspath(os.path.dirname( __file__ ))
     PATH_TO_MODEL = os.path.join(PATH_TO_SOURCE, "model.h5")
     PATH_TO_HAARCASCADE = os.path.join(PATH_TO_SOURCE, "haarcascade_frontalface_default.xml")
-    PATH_TO_TEXTFILE = os.path.join(PATH_TO_SOURCE, "emotion.txt")
     QUEUE_SIZE = 20
 
     def __init__(self):
@@ -64,7 +64,7 @@ class EmotionDetection:
                 maxindex = int(np.argmax(prediction))
                 self.ring.append(maxindex)
                 emotionCount += 1
-                cv2.putText(frame, self.emotion_dict[maxindex], (x+20, y-60), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
+                cv2.putText(frame, str(Emotion(maxindex + 1)), (x+20, y-60), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
             cv2.namedWindow('EmotionDetection', cv2.WND_PROP_FULLSCREEN)
             cv2.setWindowProperty('EmotionDetection',cv2.WND_PROP_FULLSCREEN,1)
             cv2.imshow('EmotionDetection', cv2.resize(frame, (800, 480), interpolation=cv2.INTER_CUBIC))
@@ -72,5 +72,6 @@ class EmotionDetection:
         cap.release()
         cv2.destroyAllWindows()
         if emotionCount == self.QUEUE_SIZE:
-            return (self.ring.getMode() + 1)
+            returnvalue = self.ring.getMode() + 1
+            return returnvalue
         return None

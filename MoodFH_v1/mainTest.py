@@ -15,7 +15,6 @@ class MainTest:
     #--Konstanten--
     PATH_TO_SOURCE = os.path.abspath(os.path.dirname( __file__ ))
     PATH_TO_CONFIG = os.path.join(PATH_TO_SOURCE, "soundConfig.yaml")
-    PATH_TO_TEXTFILE = os.path.join(PATH_TO_SOURCE, "emotion.txt")
 
     def __init__ (self):
         playertype = self._load_playertype()
@@ -67,13 +66,13 @@ class MainTest:
                     func = self.switcher.get(str(data.keycode), "nothing")
                     if func != "nothing":
                         func()
-    
+
     def send_audio(self, emotion):
         self.audioThread.send_emotion(emotion)
-        
+
     def send_light(self, emotion):
         self.lightThread.send_emotion(emotion)
-        
+
     def kill_threads(self):
         self.audioThread.kill()
         self.lightThread.kill()
@@ -105,48 +104,23 @@ class MainTest:
 #---------------------------- Input Methodenaufrufe --------------------
 
     def toggleAnimation(self):
-        print("Animation Off")
-        f = open(self.PATH_TO_TEXTFILE, "a")
-        f.write("Animation Off")
-        f.close()
         self.send_light("toggleAnimation")
 
     def togglePause(self):
-        print("Toggle Pause")
-        f = open(self.PATH_TO_TEXTFILE, "a")
-        f.write("Toggle Pause")
-        f.close()
         self.send_audio("toggle")
         self.send_light("togglePause")
 
     def nextSong(self):
-        print("Next Song")
-        f = open(self.PATH_TO_TEXTFILE, "a")
-        f.write("Next Song")
-        f.close()
         self.send_audio("next")
 
     def volumeUp(self):
-        print("Volume Up")
-        f = open(self.PATH_TO_TEXTFILE, "a")
-        f.write("Volume Up")
-        f.close()
         self.send_audio("+")
 
     def volumeDown(self):
-        print("Volume Down")
-        f = open(self.PATH_TO_TEXTFILE, "a")
-        f.write("Volume Down")
-        f.close()
         self.send_audio("-")
 
     def detectEmotion(self):
-        print("Emotionserkennung gestartet!")
-        f = open(self.PATH_TO_TEXTFILE, "a")
-        f.write("Emotionserkennung gestartet!")
-        f.close()
         emotion = self.emotionDetection.play()
-        print(emotion)
         self.send_audio(emotion)
         self.send_light(emotion)
 

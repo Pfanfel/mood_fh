@@ -55,7 +55,7 @@ class LightThread(threading.Thread): #Erbt von Thread
                 elif(msg == "togglePause"):
                     self.pause = not self.pause
                 else:
-                    self.emotion = msg
+                    self.emotion = Emotion(msg)
         except queue.Empty:
             pass
 
