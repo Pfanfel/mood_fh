@@ -49,13 +49,10 @@ class LightThread(threading.Thread): #Erbt von Thread
         try:
             while True: #Lauft bis eine Exception fliegt (queue leer)
                 msg = self.queue.get(block=False, timeout=None)
-                if(msg == "false"):
+                if(msg == "toggleAnimation"):
                     self.pause = False
-                    self.animationOn = False
-                elif(msg == "true"):
-                    self.pause = False
-                    self.animationOn = True
-                elif(msg == "toggle"):
+                    self.animationOn = not self.animationOn
+                elif(msg == "togglePause"):
                     self.pause = not self.pause
                 else:
                     self.emotion = msg

@@ -1,3 +1,4 @@
+#!/home/pi/Documents/mood_fh/MoodFH_v1/moodvenv/bin/python3
 import threading
 import queue
 import code
@@ -25,24 +26,21 @@ class MainTest:
         # Create EmotionDetection instance
         self.emotionDetection = EmotionDetection()
         # Select input device
-        self.dev = InputDevice('/dev/input/event2')
+        self.dev = InputDevice('/dev/input/event6')
         
         # TODO: VLLT WECHSELT DEVICE NACH JEDEM BOOT
-        #devices = [evdev.InputDevice(path) for path in evdev.list_devices()]
-        #for device in devices:
-        #    print(device.path, device.name, device.phys)
+        devices = [evdev.InputDevice(path) for path in evdev.list_devices()]
+        for device in devices:
+            print(device.path, device.name, device.phys)
         
         # Create switcher for ir-inputs
         self.switcher = {
-                "KEY_NUMERIC_0" : self.animationOff,
-                "KEY_DELETE" : self.animationOn,
-                "KEY_ENTER" : self.soundOff,
-                "KEY_CHANNEULUP" : self.soundOn,
-                "KEY_CHANNELDOWN" : self.togglePause,
-                "KEY_NUMERIC_3" : self.nextSong,
-                "KEY_NUMERIC_4" : self.volumeUp,
-                "KEY_NUMERIC_5" : self.volumeDown,
-                "KEY_NUMERIC_6" : self.detectEmotion
+                "KEY_NUMERIC_0" : self.toggleAnimation,
+                "KEY_PLAYPAUSE" : self.togglePause,
+                "KEY_NEXT" : self.nextSong,
+                "KEY_NUMERIC_2" : self.volumeUp,
+                "KEY_NUMERIC_1" : self.volumeDown,
+                "KEY_CHANNELDOWN" : self.detectEmotion
             }
 
     def start_audio_thread(self):
@@ -106,32 +104,12 @@ class MainTest:
 
 #---------------------------- Input Methodenaufrufe --------------------
 
-    def animationOff(self):
+    def toggleAnimation(self):
         print("Animation Off")
         f = open(self.PATH_TO_TEXTFILE, "a")
         f.write("Animation Off")
         f.close()
-        self.send_light("false")
-        
-    def animationOn(self):
-        print("Animation On")
-        f = open(self.PATH_TO_TEXTFILE, "a")
-        f.write("Animation On")
-        f.close()
-        self.send_light("true")
-        
-        # TODO rausnehmen (auch aus der key.conf)
-    def soundOff(self):
-        print("Sound Off")
-        f = open(self.PATH_TO_TEXTFILE, "a")
-        f.write("Sound Off")
-        f.close()
-
-    def soundOn(self):
-        print("Sound On")
-        f = open(self.PATH_TO_TEXTFILE, "a")
-        f.write("Sound On")
-        f.close()
+        self.send_light("toggleAnimation")
 
     def togglePause(self):
         print("Toggle Pause")
@@ -139,7 +117,7 @@ class MainTest:
         f.write("Toggle Pause")
         f.close()
         self.send_audio("toggle")
-        self.send_light("toggle")
+        self.send_light("togglePause")
 
     def nextSong(self):
         print("Next Song")

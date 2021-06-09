@@ -1,4 +1,3 @@
-#!/home/pi/Documents/mood_fh/EmotionDetection/emotionvenv/bin/python3
 import argparse
 import os
 import sys
