@@ -23,7 +23,7 @@
    Beeinhaltet die einzelnen Emotionen
 */
 typedef enum {
-  NONE = 0, NEUTRAL, HAPPY, SAD, ANGRY, DISGUSTED, FEARFUL, SURPRISED
+  NONE = 0, ANGRY, DISGUSTED, FEARFUL, HAPPY, NEUTRAL, SAD, SURPRISED
 } Emotion;
 
 /**
