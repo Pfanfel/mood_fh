@@ -88,7 +88,7 @@ class MainTest:
         except KeyError:
             print('The Playerfield does not exist in config')
             #TODO: Weiter behandeln oder reicht das?
-        print(f'The loaded playertype is: "{player}"')
+        print(f'The loaded playertype is: {player}')
         player = player.lower()
         return player
 
