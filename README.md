@@ -1,51 +1,11 @@
-# mood_fh
-
-Medieninformatik-Projekt Wintersemester 20/21
+# Medieninformatik-Projekt Wintersemester 20/21
 
 - Michael Smirnov (minf103430) 6. Fachsemester
 - Len Harmsen (minf103760) 5. Fachsemester
 - Alina von der Heide (minf103647) 5. Fachsemester
 - Annalisa Anzioso (minf103575) 5. Fachsemester
 
-## Virtual environment
-
-Erstellt ein Environment im aktuellen Verzeichniss:
-
-Arch:
-
-`python -m venv <enviroment_name>`
-
-Ubuntu:
-
-`sudo apt install python3-pip`, falls pip nicht vorhanden
-
-`pip3 install virtualenv`, falls virtualenv nicht vorhanden
-
-`python3 -m virtualenv <enviroment_name>`
-
-Das virtual environment aktivieren
-
-`source <enviroment_name>/bin/activate`
-
-Der Name des environment sollte nun am Anfang der Kommandozeile stehen
-
-`<enviroment_name> $`
-
-Das virtual environment deaktivieren:
-
-`deactivate`
-
-## Die für das Programm notwendigen Packages installieren
-
-`pip install -r requirements.txt`
-
-## Aktualisieren der `requirements.txt`
-
-Beim Hinzufügen von neuen Packages in das venv muss die requirements.txt aktualisiert werden
-
-`pip freeze -l > requirements.txt # or --local instead of -l`
-
-## Anforderungen
+## Anforderungen (zu Beginn des Projekts)
 
 ### Gesichtserkennung
 
@@ -62,7 +22,7 @@ Zusätzlich wäre denkbar diese Songs über eine Python API aus Spotify Playlist
 
 Das Licht wird an die erkannte Stimmung angepasst. Jede Stimmung bekommt dabei eine Farbe zugeordnet. Eine Erweiterung wären dann unterschiedliche Lichtprogramme, welche je nach erkannter Emotion eine passende Stimmung im Raum verbreiten sollen.
 
-### Webserver (optional)
+### Webserver [optional]
 
 Bei genügend Zeit könnte das PI noch mit einem Webserver verbunden werden. Über diesen werden dann Bilder an das PI gesendet, in denen dann Emotionen erkannt werden können.
 Dabei könnte der Ablauf folgendermaßen aussehen:
