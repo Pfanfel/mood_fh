@@ -1,4 +1,4 @@
-# Installation von Sound-Modul
+# Installationsanleitung
 
 ## PI aufsetzen
 
@@ -14,7 +14,9 @@ Alternativ kann die Einrichtung direkt auf dem PI vorgenommen werden.
 
 5. Updaten und rebooten
 
-## Projekt Klonen und Grundeinrichtung vornehmen
+## Installation von Sound-Modul
+
+### Projekt Klonen und Grundeinrichtung vornehmen
 
 1. Mit `sudo raspi-config` die Konfiguration öffnen und unter `System Options (S) -> Audio (S2)` auswählen und den Audio Output auf `“1 Headphones”` stellen. Außerdem sollte hier auch schon die PI Kamera aktiviert werden, da diese später noch benötigt wird.
 
@@ -46,7 +48,7 @@ Alternativ kann die Einrichtung direkt auf dem PI vorgenommen werden.
 
 6. Mit `python main.py` im Sound Ordner kann das abspielen von lokaler Musik mit dem pygame-player getestet werden. (Player sollte dafür in der `soundConfig.yaml` auf pygame gesetzt sein)
 
-## [Optional] Einrichten von Mopedy, um das abspielen von Musik über Spotify zu ermöglichen. Spotify Permium Account benötigt
+### [Optional] Einrichten von Mopedy, um das abspielen von Musik über Spotify zu ermöglichen. Spotify Permium Account benötigt
 
 1. Mopedy nach der folgenden Anleitung installieren: <https://docs.mopidy.com/en/latest/installation/raspberrypi/>
 `mopidy.sh` script ausführen (ggf. mit `chmod +x` ausführbar machen)
