@@ -44,7 +44,7 @@ Alternativ kann die Einrichtung direkt auf dem PI vorgenommen werden.
 
 5. Mit `chmod +x setup.sh` das script, welches zusätzlich den von pygame benötigten mixter runterläd auf ausführbar stellen und anschließend mit `./setup.sh` ausführen.
 
-6. Mit `python mainTest.py` im Sound Ordner kann das abspielen von lokaler Musik mit dem pygame-player getestet werden. (Player sollte dafür in der `soundConfig.yaml` auf pygame gesetzt sein)
+6. Mit `python main.py` im Sound Ordner kann das abspielen von lokaler Musik mit dem pygame-player getestet werden. (Player sollte dafür in der `soundConfig.yaml` auf pygame gesetzt sein)
 
 ## [Optional] Einrichten von Mopedy, um das abspielen von Musik über Spotify zu ermöglichen. Spotify Permium Account benötigt
 
@@ -84,4 +84,4 @@ Im Debug output sollte die Zeile : `Logged into Spotify Web API as XYZ` erschein
     - Mit `sudo -u mopidy aplay /usr/share/sounds/alsa/Front_Center.wav` sollte der Ton nun auch unter dem `mopidy` User aus dem Klinkenstecker und mehr aus dem Monitor kommen, falls einer während des Vorgangs angeschlossen wurde.
     - Reboot
 
-9. Mit `python mainTest.py` und der `soundConfig.yaml` auf `spotify` kann nach dem ausführen mit `m.send("happy")` getestet werden, ob der Spotify-Player wie gewünscht funktioniert.
+9. Mit `python main.py` und der `soundConfig.yaml` auf `spotify` kann nach dem ausführen mit `m.send("happy")` getestet werden, ob der Spotify-Player wie gewünscht funktioniert.

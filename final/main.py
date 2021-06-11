@@ -6,11 +6,11 @@ import yaml
 import os
 import evdev
 from evdev import InputDevice, categorize, ecodes
-from emotionClass import EmotionDetection
+from emotion import EmotionDetection
 from soundClasses import AudioThread, MopidyPlayer, PygamePlayer
 from light import LightThread
 
-class MainTest:
+class Main:
 
     #--Konstanten--
     PATH_TO_SOURCE = os.path.abspath(os.path.dirname( __file__ ))
@@ -129,7 +129,7 @@ class MainTest:
 
 if __name__ == "__main__":
     try:
-        m = MainTest()
+        m = Main()
         m.start_audio_thread()
         m.start_light_thread()
         m.start_loop()

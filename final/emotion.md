@@ -46,5 +46,5 @@ pip install -r emotion_requirements.txt
 **Programm starten:**
 
 ```
-python mainTest.py
+python main.py
 ```
