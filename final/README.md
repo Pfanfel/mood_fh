@@ -87,3 +87,52 @@ Im Debug output sollte die Zeile : `Logged into Spotify Web API as XYZ` erschein
     - Reboot
 
 9. Mit `python main.py` und der `soundConfig.yaml` auf `spotify` kann nach dem ausführen mit `m.send("happy")` getestet werden, ob der Spotify-Player wie gewünscht funktioniert.
+
+## Webcam-Emotion-Detection
+
+**OpenCV installieren:**
+
+```
+sh install_opencv_dependencies.sh
+
+```
+
+Falls nach der Installation Probleme auftreten, kann auch dieser [guide](https://www.pyimagesearch.com/2019/09/16/install-opencv-4-on-raspberry-pi-4-and-raspbian-buster/) benutzt werden.
+
+**Folgende Zeile in _/boot/config.txt_ ändern:**
+
+```
+dtoverlay=gpio-ir,gpio_out_pin=17,gpio_in_pin=18,gpio_in_pull=up
+```
+
+Falls diese Zeile nicht vorhanden ist am Ende der Datei anhängen.
+
+**TODO: Folgende Zeile in Crontab hinzufügen:**
+
+```
+sh /PFAD/setup_ir-keytable.sh
+```
+
+**Virtuelle Umgebung einrichten:**
+
+```
+virtualenv <enviroment_name> -p python3
+```
+
+**Aktivieren der virtuellen Umgebung:**
+
+```
+source <enviroment_name>/bin/activate
+```
+
+**Bilbiotheken installieren:**
+
+```
+pip install -r emotion_requirements.txt
+```
+
+**Programm starten:**
+
+```
+python main.py
+```
