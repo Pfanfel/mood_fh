@@ -11,6 +11,10 @@ from soundClasses import AudioThread, MopidyPlayer, PygamePlayer
 from light import LightThread
 
 class Main:
+    '''
+    Einstiegspunkt des Programms, welcher bei Boot des PIs ausgefuehrt werden soll.
+    Kuemmert sich um das starten der Sound- und Light-Threads, sowie die Signalverarbeitung der IR-Fernbedienung.
+    '''
 
     #--Konstanten--
     PATH_TO_SOURCE = os.path.abspath(os.path.dirname( __file__ ))
@@ -133,7 +137,5 @@ if __name__ == "__main__":
         m.start_audio_thread()
         m.start_light_thread()
         m.start_loop()
-        print("mit python ausfuehren und in der interaktiven Shell mit m.send(\"<Emotion>\") die Emotion steuern")
-        code.interact(local=globals()) #Startet die interactive shell zum testen.
     finally:
         m.kill_threads()
