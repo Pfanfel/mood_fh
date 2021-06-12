@@ -47,7 +47,7 @@ class MopidyPlayer:
 
     def close(self):
         '''
-        Raumt auf, wenn player gekillt wird.
+        Raeumt auf, wenn Player gekillt wird.
         Muss stop() Signal an den mopidy Server senden, sonst spielt die Musik noch nachdem das
         Programm beendet wurde.  
         '''

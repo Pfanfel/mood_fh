@@ -6,7 +6,7 @@ import threading
 from emotionEnum import Emotion
 
 '''
-    Stellt einen Thread bereit, um das Licht-Modul zu steuern
+Stellt einen Thread bereit, um das Licht-Modul zu steuern
 '''
 class LightThread(threading.Thread): #Erbt von Thread
     

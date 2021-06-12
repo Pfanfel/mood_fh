@@ -13,22 +13,24 @@ from light import LightThread
 class Main:
     '''
     Einstiegspunkt des Programms, welcher bei Boot des PIs ausgefuehrt werden soll.
-    Kuemmert sich um das starten der Sound- und Light-Threads, sowie die Signalverarbeitung der IR-Fernbedienung.
+    Kuemmert sich um das Starten der Sound- und Light-Threads, sowie die Signalverarbeitung der IR-Fernbedienung.
     '''
-
     #--Konstanten--
     PATH_TO_SOURCE = os.path.abspath(os.path.dirname( __file__ ))
     PATH_TO_CONFIG = os.path.join(PATH_TO_SOURCE, "soundConfig.yaml")
 
     def __init__ (self):
+        '''
+        Initialisiert alle Threads, die Emotionserkennung und das InputDevice.
+        '''
         playertype = self._load_playertype()
-        # Create AudioThread
+
         self.audioThread = self._create_audio_thread(playertype)
-        # Create LightThread
+
         self.lightThread = LightThread()
-        # Create EmotionDetection instance
+        
         self.emotionDetection = EmotionDetection()
-        # Select input device
+        # IR-InputDevice waehlen
         self.dev = InputDevice('/dev/input/event6')
         
         # TODO: VLLT WECHSELT DEVICE NACH JEDEM BOOT
@@ -36,67 +38,76 @@ class Main:
         for device in devices:
             print(device.path, device.name, device.phys)
         
-        # Create switcher for ir-inputs
+        # Switch fuer die IR-Inputs
         self.switcher = {
-                "KEY_NUMERIC_0" : self.toggleAnimation,
-                "KEY_PLAYPAUSE" : self.togglePause,
-                "KEY_NEXT" : self.nextSong,
-                "KEY_NUMERIC_2" : self.volumeUp,
-                "KEY_NUMERIC_1" : self.volumeDown,
-                "KEY_CHANNELDOWN" : self.detectEmotion
+                "KEY_NUMERIC_0" : self._toggleAnimation,
+                "KEY_PLAYPAUSE" : self._togglePause,
+                "KEY_NEXT" : self._nextSong,
+                "KEY_NUMERIC_2" : self._volumeUp,
+                "KEY_NUMERIC_1" : self._volumeDown,
+                "KEY_CHANNELDOWN" : self._detectEmotion
             }
 
-    def start_audio_thread(self):
+    def _start_loop(self):
+        '''
+        Mainloop des Programs. Empfaengt IR-Signale und ruft entsprechende Methoden auf. 
+        '''
+        for event in self.dev.read_loop():
+            if event.type == ecodes.EV_KEY:
+                data = categorize(event)
+                if data.keystate == 1:
+                    func = self.switcher.get(str(data.keycode), "nothing")
+                    if func != "nothing":
+                        func()
+
+    def _start_audio_thread(self):
+        '''
+        Startet den AudioThread.
+        '''
         if self.audioThread is not None:
             self.audioThread.start()
         else:
             print('Could not create audio thread')
 
-    def start_light_thread(self):
+    def _start_light_thread(self):
+        '''
+        Startet den LightThread.
+        '''
         if self.lightThread is not None:
             self.lightThread.start()
         else:
             print('Could not create light thread')
 
-    def start_loop(self):
-        # Start event loop
-        for event in self.dev.read_loop():
-            # Key event
-            if event.type == ecodes.EV_KEY:
-                data = categorize(event)
-                # Button down (not up) event
-                if data.keystate == 1:
-                    print(str(data.keycode))
-                    func = self.switcher.get(str(data.keycode), "nothing")
-                    if func != "nothing":
-                        func()
-
-    def send_audio(self, emotion):
+    def _send_audio(self, emotion):
+        '''
+        Sendet ein Signal an den AudioThread.
+        '''
         self.audioThread.send_emotion(emotion)
 
-    def send_light(self, emotion):
+    def _send_light(self, emotion):
+        '''
+        Sendet ein Signal an den LightThread.
+        '''
         self.lightThread.send_emotion(emotion)
 
-    def kill_threads(self):
-        self.audioThread.kill()
-        self.lightThread.kill()
-        self.audioThread.join()
-        self.lightThread.join()
-
     def _load_playertype(self):
+        '''
+        Liest den Musikplayer aus der Config-Datei.
+        '''
         with open(self.PATH_TO_CONFIG, "r") as t:
             config = yaml.safe_load(t)
-            print(config)
         try:
             player = config['player_type']
         except KeyError:
-            print('The Playerfield does not exist in config')
             #TODO: Weiter behandeln oder reicht das?
-        print(f'The loaded playertype is: {player}')
+            print('The Playerfield does not exist in config')
         player = player.lower()
         return player
 
     def _create_audio_thread(self, playertype):
+        '''
+        Erstellt den AudioThread abhaenging vom ausgewaehlten Musikplayer.
+        '''
         if (playertype == 'pygame'):
             return AudioThread(PygamePlayer)
         elif (playertype == 'spotify'):
@@ -107,35 +118,65 @@ class Main:
 
 #---------------------------- Input Methodenaufrufe --------------------
 
-    def toggleAnimation(self):
-        self.send_light("toggleAnimation")
+    def _toggleAnimation(self):
+        '''
+        Sendet ein toggleAnimation Signal an den LightThread.
+        '''
+        self._send_light("toggleAnimation")
 
-    def togglePause(self):
-        self.send_audio("toggle")
-        self.send_light("togglePause")
+    def _togglePause(self):
+        '''
+        Sendet ein togglePause Signal an den Light- und AudioThread.
+        '''
+        self._send_audio("toggle")
+        self._send_light("togglePause")
 
-    def nextSong(self):
-        self.send_audio("next")
+    def _nextSong(self):
+        '''
+        Sendet ein Signal an den AudioThread, um das naechste Lied zu starten.
+        '''
+        self._send_audio("next")
 
-    def volumeUp(self):
-        self.send_audio("+")
+    def _volumeUp(self):
+        '''
+        Sendet ein Signal an den AudioThread, um die Lautstaerke zu erhoehen.
+        '''
+        self._send_audio("+")
 
-    def volumeDown(self):
-        self.send_audio("-")
+    def _volumeDown(self):
+        '''
+        Sendet ein Signal an den AudioThread, um die Lautstaerke zu verringern.
+        '''
+        self._send_audio("-")
 
-    def detectEmotion(self):
+    def _detectEmotion(self):
+        '''
+        Startet die Emotionserkennung und sendet bei erkannter Emotion diese an die Threads.
+        '''
         emotion = self.emotionDetection.play()
-        self.send_audio(emotion)
-        self.send_light(emotion)
+        self._send_audio(emotion)
+        self._send_light(emotion)
 
 
 #-----------------------------------------------------------------------
 
+    def _kill_threads(self):
+        '''
+        Killt alle Threads.
+        '''
+        self.audioThread.kill()
+        self.lightThread.kill()
+        self.audioThread.join()
+        self.lightThread.join()
+
 if __name__ == "__main__":
+    '''
+    Startet die Threads und die Loop fuer die IR-Signale.
+    '''
     try:
         m = Main()
-        m.start_audio_thread()
-        m.start_light_thread()
-        m.start_loop()
+        m._start_audio_thread()
+        m._start_light_thread()
+        m._start_loop()
     finally:
-        m.kill_threads()
+        m._kill_threads()
