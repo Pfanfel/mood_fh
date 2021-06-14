@@ -53,9 +53,9 @@
 
 ## Pi aufsetzen und Grundeinrichtung vornehmen
 
-1. Herunterladen und erstellen des [Images](<https://www.raspberrypi.org/software/>).
+1. Herunterladen und erstellen des <a href="https://www.raspberrypi.org/software/" target="_blank">Images</a>.
 
-2. [Optional, falls kein Display vorhanden ist] [Aktivieren](<https://blog.sebastian-martens.de/development/setup-raspberry-pi-without-external-monitor-and-keyboards/>) von SSH.  
+2. [Optional, falls kein Display vorhanden ist] <a href="https://blog.sebastian-martens.de/development/setup-raspberry-pi-without-external-monitor-and-keyboards/" target="_blank">Aktivieren</a> von SSH.  
 Alternativ kann die Einrichtung direkt auf dem Pi vorgenommen werden.
 
 4. Passwort ändern.
@@ -123,11 +123,11 @@ Alternativ kann die Einrichtung direkt auf dem Pi vorgenommen werden.
     ```
     $ ./setup.sh
     ```
-    Falls nach der Installation Probleme bei OpenCV auftreten, kann auch dieser [guide](https://www.pyimagesearch.com/2019/09/16/install-opencv-4-on-raspberry-pi-4-and-raspbian-buster/) benutzt werden.
+    Falls nach der Installation Probleme bei OpenCV auftreten, kann auch dieser <a href="https://www.pyimagesearch.com/2019/09/16/install-opencv-4-on-raspberry-pi-4-and-raspbian-buster/" target="_blank">guide</a> benutzt werden.
 
 ## [Optional] Einrichten von Mopidy, um das Abspielen von Musik über Spotify zu ermöglichen.
 > Hierbei wird ein **Spotify Permium Account** benötigt!
-1. Mopidy [installieren](<https://docs.mopidy.com/en/latest/installation/raspberrypi/>).
+1. Mopidy <a href="https://docs.mopidy.com/en/latest/installation/raspberrypi/" target="_blank">installieren</a>.
 
 2. Mopidy in die "video"-Gruppe hinzufügen.
     ```
@@ -140,10 +140,10 @@ Alternativ kann die Einrichtung direkt auf dem Pi vorgenommen werden.
 4. Folgende Zeile in _/home/pi/.config/mopidy/mopidy.conf_ anpassen.
     - Unter `[audio]`:  
     `output = alsasink` einkommentieren/einfügen, damit der HDMI-Ausgang nicht genutzt wird.
-5. [Konfiguration](<https://github.com/mopidy/mopidy-spotify#configuration>) von Spotify.
-    - [Details](<https://docs.mopidy.com/en/release-0.19/config/>) zur Konfiguration
+5. <a href="https://github.com/mopidy/mopidy-spotify#configuration" target="_blank">Konfiguration</a> von Spotify.
+    - <a href="https://docs.mopidy.com/en/release-0.19/config/" target="_blank">Details</a> zur Konfiguration
     - In _/home/pi/.config/mopidy/mopidy.conf_ den Username und das Passwort des **Spotify-Premium** Accounts eintragen
-    - [Authentifizierung](<https://mopidy.com/ext/spotify/#authentication>) durchfüheren 
+    - <a href="https://mopidy.com/ext/spotify/#authentication" target="_blank">Authentifizierung</a> durchfüheren 
     - Die auskommentieren Zeilen unter `[spotify]` einkommentieren
 
 6. Den Server starten und prüfen, ob der Login geklappt hat.
@@ -151,7 +151,7 @@ Alternativ kann die Einrichtung direkt auf dem Pi vorgenommen werden.
     $ mopidy
     ```
     Im Debug-Output sollte die Zeile : `Logged into Spotify Web API as XYZ` erscheinen.
-7. Mopidy [on boot](<https://docs.mopidy.com/en/latest/running/service/>) starten lassen.
+7. Mopidy <a href="https://docs.mopidy.com/en/latest/running/service/" target="_blank">on boot</a> starten lassen.
     - Die Datei _mopidy-conf_ verschieben.
         ```
         $ sudo cp /home/pi/.config/mopidy/mopidy.conf /etc/mopidy/mopidy.conf
@@ -176,8 +176,8 @@ Alternativ kann die Einrichtung direkt auf dem Pi vorgenommen werden.
         ```
 
 8. Den Audio-Output für den Mopidy-User ändern, da dieser im Defaultfall Ton über HDMI und nicht über Klinke abspielt.
-    - Default auf den Kopfhörereingang [setzen](<https://www.alsa-project.org/wiki/Setting_the_default_device>).
-    - Da diese Datei momentan von Raspbian noch beim rebooten gelöscht wird (siehe [hier](<https://www.raspberrypi.org/forums/viewtopic.php?t=295008>)), muss diese auf immutable gesetzt werden.
+    - Default auf den Kopfhörereingang <a href="https://www.alsa-project.org/wiki/Setting_the_default_device" target="_blank">setzen</a>
+    - Da diese Datei momentan von Raspbian noch beim rebooten gelöscht wird (siehe <a href="https://www.raspberrypi.org/forums/viewtopic.php?t=295008" target="_blank">hier</a>), muss diese auf immutable gesetzt werden.
         ```
         $ sudo chattr +i /etc/asound.conf
         ```
@@ -218,11 +218,11 @@ Alternativ kann die Einrichtung direkt auf dem Pi vorgenommen werden.
 ## Einrichtung des Lichtmoduls
 
 ### Einrichtung des Arduino
-- Download der [FastLED-Library](http://https://github.com/FastLED/FastLED "FastLED-Library") zur Steuerung des LED-Strips
+- Download der <a href="https://github.com/FastLED/FastLED" target="_blank">FastLED-Library</a> zur Steuerung des LED-Strips
 
 - Installation der Arduino IDE 
-    - [Installation unter Windows](https://www.arduino.cc/en/guide/windows "Installation unter Windows")
-    - [Installation unter Linux](https://www.arduino.cc/en/Guide/Linux "Installation unter Linux")
+    - <a href="https://www.arduino.cc/en/guide/windows" target="_blank">Installation unter Windows</a>
+    - <a href="https://www.arduino.cc/en/Guide/Linux" target="_blank">Installation unter Linux</a>
 - _light.ino_ aus dem "arduino"-Verzeichnis mit der Arduino IDE öffnen
 - Einbinden der Bibliothek:
     - `Sketch -> Bibliothek einbinden -> .ZIP Bibliothek hinzufügen`
