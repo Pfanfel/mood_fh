@@ -53,72 +53,68 @@
 
 ## Pi aufsetzen und Grundeinrichtung vornehmen
 
-1. Herunterladen und erstellen des Images mit: <https://www.raspberrypi.org/software/>
+1. Herunterladen und erstellen des [Images](<https://www.raspberrypi.org/software/>).
 
-2. [Optional, falls kein Display vorhanden ist] Auf dem Pi SSH aktivieren und mit diesem nach dieser Anleitung über SSH verbinden.
-<https://blog.sebastian-martens.de/development/setup-raspberry-pi-without-external-monitor-and-keyboards/>
+2. [Optional, falls kein Display vorhanden ist] [Aktivieren](<https://blog.sebastian-martens.de/development/setup-raspberry-pi-without-external-monitor-and-keyboards/>) von SSH.  
 Alternativ kann die Einrichtung direkt auf dem Pi vorgenommen werden.
 
 4. Passwort ändern.
 
 5. System aktualisieren.
    ```
-   sudo apt-get update && sudo apt-get upgrade -y
+   $ sudo apt-get update && sudo apt-get upgrade -y
    ```
 
 6. Raspberry Pi neu starten.
    ```
-   sudo reboot
+   $ sudo reboot
    ```
 
-7. Konfiguration öffnen.
-   - `sudo raspi-config`
-   - unter `System Options (S) -> Audio (S2)` auswählen und den Audio Output auf `“1 Headphones”` stellen
+7. Einstellungen in der Konfiguration.
+   ```
+   $ sudo raspi-config
+   ```
+   - `System Options (S) -> Audio (S2)`  
+   -> Audio-Output = `“1 Headphones”`
    - Kamera des Pi's aktivieren
 
-8. Repository clonen mit `git clone https://github.com/Pfanfel/mood_fh.git`
-
-9. Virtuelle Umgebung im aktuellen Verzeichnis erstellen:
-
-    - Arch:
+8. Repository clonen.
     ```
-	python -m venv <enviroment_name>
-	```
+    $ git clone https://github.com/Pfanfel/mood_fh.git
+    ```
 
-    - Ubuntu:
+9. Virtuelle Umgebung im aktuellen Verzeichnis erstellen.
 
+    - **Arch:**
         ```
-		sudo apt install python3-pip      # falls pip nicht vorhanden
-        pip3 install virtualenv           # falls virtualenv nicht vorhanden
+	    $ python -m venv <enviroment_name>
+	    ```
+    - **Ubuntu:**
+        ```
+	    $ sudo apt install python3-pip      # falls pip nicht vorhanden
+        $ pip3 install virtualenv           # falls virtualenv nicht vorhanden
 
-        python3 -m virtualenv <enviroment_name>
-		```
-    - Virtuelle Umgebung aktivieren:
-	 ```
-	 source <enviroment_name>/bin/activate
-	 ```
+        $ python3 -m virtualenv <enviroment_name>
+	    ```
+    - Virtuelle Umgebung aktivieren.
+	    ```
+	    $ source <enviroment_name>/bin/activate
+	    ```
+        Der Name der Umgebung sollte nun am Anfang der Kommandozeile stehen.
+	    ```
+        <enviroment_name> $
+	    ```
 
-    - Der Name der Umgebung sollte nun am Anfang der Kommandozeile stehen 
-	 ```
-     <enviroment_name> $
-	 ```
+    - Folgender Befehl dient zum Deaktivieren der virtuellen Umgebung.
+	    ```
+        <enviroment_name> $ deactivate
+	    ```
 
-    - Zum Deaktivieren der virtuellen Umgebung kann dieser Befehl verwendet werden:
-	 ```
-     $ deactivate
-	 ```
-
-10. Die notwendigen Packages können mit 
+10. Die notwendigen Packages installieren.
     ```
-	pip install -r requirements.txt
-	``` 
-	installiert werden.
-
-## Installation des Sound-Moduls
-
-> TODO: Fehler kontrollieren
-
-- Installation notwendiger Librarys
+	<enviroment_name> $ pip install -r requirements.txt
+	```
+## Installation des Sound-Moduls und OpenCV
   - Skript ausführbar machen
     ```
     $ chmod +x setup.sh
@@ -129,74 +125,96 @@ Alternativ kann die Einrichtung direkt auf dem Pi vorgenommen werden.
     ```
     Falls nach der Installation Probleme bei OpenCV auftreten, kann auch dieser [guide](https://www.pyimagesearch.com/2019/09/16/install-opencv-4-on-raspberry-pi-4-and-raspbian-buster/) benutzt werden.
 
-### [Optional] Einrichten von Mopidy, um das Abspielen von Musik über Spotify zu ermöglichen. 
+## [Optional] Einrichten von Mopidy, um das Abspielen von Musik über Spotify zu ermöglichen.
+> Hierbei wird ein **Spotify Permium Account** benötigt!
+1. Mopidy [installieren](<https://docs.mopidy.com/en/latest/installation/raspberrypi/>).
 
-> Hierbei wird ein **Spotify Permium Account** benötigt
-
-1. Mopidy nach der folgenden Anleitung installieren: <https://docs.mopidy.com/en/latest/installation/raspberrypi/>.
-
-2. Mopidy in die video Gruppe hinzufügen
+2. Mopidy in die "video"-Gruppe hinzufügen.
     ```
     $ sudo adduser mopidy video
     ```
-
-3. Zum Erstellen der Konfigutationsdatei muss Mopidy einmal von der Kommandozeile aus ausgeführt werden
+3. Mopidy von der Kommandozeile aus ausführen um _mobidy.conf_ zu erstellen.
     ```
     $ mopidy
     ```
-
-4. Konfiguration anpassen:
-   - Die Konfigurationsdatei unter `/home/pi/.config/mopidy/mopidy.conf` öffen
-   -  `output = alsasink` unter `[audio]` einkommentieren/einfügen, damit nicht der HDMI Ausgang für den Sound genutzt wird.
-
-5. Konfiguration vom Spotify vornehmen siehe: <https://github.com/mopidy/mopidy-spotify#configuration>
-    - Details zur Konfiguration: <https://docs.mopidy.com/en/release-0.19/config/>
-    - In der `/home/pi/.config/mopidy/mopidy.conf` den Username und das Passwort seines Spotify-Premium(!) Accounts eintragen
-    - Die Authentifizierung wie hier beschrieben durchfüheren (Pop-Up öffen, bestätigen, id und secret  in die mopidy.conf eintragen): <https://mopidy.com/ext/spotify/#authentication>
+4. Folgende Zeile in _/home/pi/.config/mopidy/mopidy.conf_ anpassen.
+    - Unter `[audio]`:  
+    `output = alsasink` einkommentieren/einfügen, damit der HDMI-Ausgang nicht genutzt wird.
+5. [Konfiguration](<https://github.com/mopidy/mopidy-spotify#configuration>) von Spotify.
+    - [Details](<https://docs.mopidy.com/en/release-0.19/config/>) zur Konfiguration
+    - In _/home/pi/.config/mopidy/mopidy.conf_ den Username und das Passwort des **Spotify-Premium** Accounts eintragen
+    - [Authentifizierung](<https://mopidy.com/ext/spotify/#authentication>) durchfüheren 
     - Die auskommentieren Zeilen unter `[spotify]` einkommentieren
 
-6. Mit `mopidy` den Server von der Kommandozeile aus starten und prüfen, ob der Login geklappt hat.
-Im Debug output sollte die Zeile : `Logged into Spotify Web API as XYZ` erscheinen.
+6. Den Server starten und prüfen, ob der Login geklappt hat.
+    ```
+    $ mopidy
+    ```
+    Im Debug-Output sollte die Zeile : `Logged into Spotify Web API as XYZ` erscheinen.
+7. Mopidy [on boot](<https://docs.mopidy.com/en/latest/running/service/>) starten lassen.
+    - Die Datei _mopidy-conf_ verschieben.
+        ```
+        $ sudo cp /home/pi/.config/mopidy/mopidy.conf /etc/mopidy/mopidy.conf
+        ```
+        Da beim Autostart der Service unter `mopidy` und nicht unter dem User `pi` gestartet wird.
+    - Den Mopidy-User zur "video"-Gruppe hinzufügen, falls nicht schon vorher geschehen.
+        ```
+        $ sudo usermod -aG video mopidy
+        ```
+    - Mopidy zum Autostart hinzufügen.
+        ```
+        $ sudo systemctl enable mopidy
+        ```
+    - Prüfen ob Mobidy zum Autostart hinzugefügt wurde.
+        ```
+        $ sudo systemctl status mopidy
+        ```
+    - Den Pi rebooten und erneut mit vorherigem Aufruf prüfen.
+    - Prüfen ob richtige Konfigurationsdatei geladen wurde.
+        ```
+        $ sudo mopidyctl config
+        ```
 
-7. Mopidy beim Hochfahren des Pi's automatisch starten lassen. Genau beschrieben unter: <https://docs.mopidy.com/en/latest/running/service/>
-
-    - Die mopidy config von `/home/pi/.config/mopidy/mopidy.conf` nach `/etc/mopidy/mopidy.conf` mit `sudo cp /home/pi/.config/mopidy/mopidy.conf /etc/mopidy/mopidy.conf` verschieben, da beim Autostart der Service unter `mopidy` und nicht unter dem User `pi` gestartet wird.
-    - Den `mopidy` User zu der "video"-Gruppe hinzufügen mit `sudo usermod -aG video mopidy`, falls nicht schon vorher geschehen.
-    - mopidy zum Autostart hinzufügen mit `sudo systemctl enable mopidy`
-    - Überprüfen mit `sudo systemctl status mopidy`
-    - Den Pi rebooten und erneut mit `sudo systemctl status mopidy` prüfen, ob der Service läuft.
-    - Mit `sudo mopidyctl config` prüfen, ob die richtige Konfiguration geladen wurde (Spotify User und Password vorhanden)
-
-8. Den Audio-Output für den `mopidy` User ändern, da dieser im Defaultfall Ton über HDMI und nicht über Klinke abspielt.
-    - Default auf den Kopfhörereingang setzen wie hier beschrieben: <https://www.alsa-project.org/wiki/Setting_the_default_device>
-    - Da diese Datei momentan von Raspbian noch bei reboot gelöscht wird (siehe: <https://www.raspberrypi.org/forums/viewtopic.php?t=295008>), muss diese auf immutable gesetzt werden. `sudo chattr +i /etc/asound.conf`
-    - Falls diese Datei ein Symlink ist, und dieser nicht auf immutable gesetzt werden kann, muss dieser mit `sudo rm -i /etc/asound.conf` aufgehoben, die Datei neu erstellt und danach wieder mit `sudo chattr +i /etc/asound.conf` auf immutable gesetzt werden.
-    - Mit dem Befehl `sudo -u mopidy aplay /usr/share/sounds/alsa/Front_Center.wav` kann getestet werden, ob der Ton auch unter dem `mopidy` User aus dem Klinkenstecker und nicht mehr aus dem Monitor kommt.
+8. Den Audio-Output für den Mopidy-User ändern, da dieser im Defaultfall Ton über HDMI und nicht über Klinke abspielt.
+    - Default auf den Kopfhörereingang [setzen](<https://www.alsa-project.org/wiki/Setting_the_default_device>).
+    - Da diese Datei momentan von Raspbian noch beim rebooten gelöscht wird (siehe [hier](<https://www.raspberrypi.org/forums/viewtopic.php?t=295008>)), muss diese auf immutable gesetzt werden.
+        ```
+        $ sudo chattr +i /etc/asound.conf
+        ```
+    - Falls diese Datei ein Symlink ist, und nicht auf immutable gesetzt werden kann, muss dieser aufgehoben werden.
+        ```
+        $ sudo rm -i /etc/asound.conf
+        ```
+        Anschließend müssen die beiden ersten Schritte wiederholt werden.
+    - Testen, ob der Ton unter dem Mopidy-User über die Klinke kommt.
+        ```
+        $ sudo -u mopidy aplay /usr/share/sounds/alsa/Front_Center.wav
+        ```
     - Reboot
+        ```
+        $ sudo reboot
+        ```
 
 ## Webcam-Emotion-Detection
 
-**Folgende Zeile in _/boot/config.txt_ ändern oder anhängen:**
-```
-dtoverlay=gpio-ir,gpio_out_pin=17,gpio_in_pin=18,gpio_in_pull=up
-```
-**Wichtig:** Datenkabel des IR-Moduls muss mit dem Pin GPIO18 verbunden werden!
-
-**Die _key.conf_ nach _/etc/init.d_ verschieben:**
-```
-$ sudo mv /Pfad/Zum/Programm/key.conf /etc/init.d
-```
->TODO: Foto mit Mappings
-
-**Folgende Zeile an das Ende der Crontab-Datei hinzufügen:**
-```
-$ sudo crontab -e
-```
-```
-@reboot sudo ir-keytable -p nec
-@reboot sudo ir-keytable -c -w /etc/init.d/key.conf
-```
-
+1. Folgende Zeile in _/boot/config.txt_ ändern oder anhängen:**
+    ```
+    dtoverlay=gpio-ir,gpio_out_pin=17,gpio_in_pin=18,gpio_in_pull=up
+    ```
+    **Wichtig:** Datenkabel des IR-Moduls muss mit dem Pin GPIO18 verbunden werden!
+2. Die _key.conf_ nach _/etc/init.d_ verschieben:**
+    ```
+    $ sudo mv /Pfad/Zum/Programm/key.conf /etc/init.d
+    ```
+    >TODO: Foto mit Mappings
+3. Folgende Zeile an das Ende der Crontab-Datei hinzufügen:**
+    ```
+    $ sudo crontab -e
+    ```
+    ```
+    @reboot sudo ir-keytable -p nec
+    @reboot sudo ir-keytable -c -w /etc/init.d/key.conf
+    ```
 ## Einrichtung des Lichtmoduls
 
 ### Einrichtung des Arduino
@@ -214,9 +232,7 @@ $ sudo crontab -e
 - Hochladen auswählen
 
 Die Installation der IDE kann entweder auf einem externen PC erfolgen, in dem der Arduino per USB verbunden wird oder direkt auf dem Raspberry Pi (ebenfalls über Verbindung mit USB).
-
 ### Hardware
-
 ```
 TODO: Hier soll das Bild hin z.B.
 ```
