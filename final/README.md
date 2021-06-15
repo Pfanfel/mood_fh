@@ -197,17 +197,17 @@ Alternativ kann die Einrichtung direkt auf dem Pi vorgenommen werden.
 
 ## Webcam-Emotion-Detection
 
-1. Folgende Zeile in _/boot/config.txt_ ändern oder anhängen:**
+1. Folgende Zeile in _/boot/config.txt_ ändern oder anhängen:
     ```
     dtoverlay=gpio-ir,gpio_out_pin=17,gpio_in_pin=18,gpio_in_pull=up
     ```
     **Wichtig:** Datenkabel des IR-Moduls muss mit dem Pin GPIO18 verbunden werden!
-2. Die _key.conf_ nach _/etc/init.d_ verschieben:**
+2. Die _key.conf_ nach _/etc/init.d_ verschieben:
     ```
     $ sudo mv /Pfad/Zum/Programm/key.conf /etc/init.d
     ```
     >TODO: Foto mit Mappings
-3. Folgende Zeile an das Ende der Crontab-Datei hinzufügen:**
+3. Folgende Zeile an das Ende der Crontab-Datei hinzufügen:
     ```
     $ sudo crontab -e
     ```
