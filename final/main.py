@@ -28,19 +28,13 @@ class Main:
         self.audioThread = self._create_audio_thread(playertype)
 
         self.lightThread = LightThread()
-        
-        self.emotionDetection = EmotionDetection()
-        # IR-InputDevice waehlen
-        self.dev = InputDevice('/dev/input/event6')
-        
-        # TODO: auskommentieren wenn fertig!
-        #self.dev = _getInputDevice()
 
-        # TODO: VLLT WECHSELT DEVICE NACH JEDEM BOOT
-        devices = [evdev.InputDevice(path) for path in evdev.list_devices()]
-        for device in devices:
-            print(device.path, device.name, device.phys)
-        
+        self.emotionDetection = EmotionDetection()
+
+        self.dev = self._getInputDevice()
+        if self.dev == None:
+            print("Kein IR-Device gefunden!")
+
         # Switch fuer die IR-Inputs
         self.switcher = {
                 "KEY_NUMERIC_0" : self._toggleAnimation,
@@ -51,17 +45,15 @@ class Main:
                 "KEY_CHANNELDOWN" : self._detectEmotion
             }
 
-    #def _getInputDevice(self):
-    #    '''
-    #    Liefert das Input Device (IR-Diode)
-    #    '''
-    #    devices = [evdev.InputDevice(path) for path in evdev.list_devices()]
-    #    # TODO: NAME EINFUEGEN!
-    #    name = 
-    #    for device in devices:
-    #        if device.name == name:
-    #            return device
-    #    return None
+    def _getInputDevice(self):
+        '''
+        Liefert das Input Device (IR-Diode)
+        '''
+        devices = [evdev.InputDevice(path) for path in evdev.list_devices()]
+        for device in devices:
+            if device.name == 'gpio_ir_recv':
+                return device
+        return None
 
     def _start_loop(self):
         '''
@@ -188,8 +180,8 @@ if __name__ == "__main__":
     '''
     Startet die Threads und die Loop fuer die IR-Signale.
     '''
+    m = Main()
     try:
-        m = Main()
         m._start_audio_thread()
         m._start_light_thread()
         m._start_loop()
