@@ -33,6 +33,9 @@ class Main:
         # IR-InputDevice waehlen
         self.dev = InputDevice('/dev/input/event6')
         
+        # TODO: auskommentieren wenn fertig!
+        #self.dev = _getInputDevice()
+
         # TODO: VLLT WECHSELT DEVICE NACH JEDEM BOOT
         devices = [evdev.InputDevice(path) for path in evdev.list_devices()]
         for device in devices:
@@ -47,6 +50,18 @@ class Main:
                 "KEY_NUMERIC_1" : self._volumeDown,
                 "KEY_CHANNELDOWN" : self._detectEmotion
             }
+
+    #def _getInputDevice(self):
+    #    '''
+    #    Liefert das Input Device (IR-Diode)
+    #    '''
+    #    devices = [evdev.InputDevice(path) for path in evdev.list_devices()]
+    #    # TODO: NAME EINFUEGEN!
+    #    name = 
+    #    for device in devices:
+    #        if device.name == name:
+    #            return device
+    #    return None
 
     def _start_loop(self):
         '''
