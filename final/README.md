@@ -206,7 +206,7 @@ Alternativ kann die Einrichtung direkt auf dem Pi vorgenommen werden.
     ```
     $ sudo mv /Pfad/Zum/Programm/key.conf /etc/init.d
     ```
-    >TODO: Foto mit Mappings
+    <img src="images\key_mapping.jpg" width="350">
 3. Folgende Zeile an das Ende der Crontab-Datei hinzufügen:
     ```
     $ sudo crontab -e
