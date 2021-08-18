@@ -218,6 +218,9 @@ Alternativ kann die Einrichtung direkt auf dem Pi vorgenommen werden.
 ## Einrichtung des Lichtmoduls
 
 ### Einrichtung des Arduino
+
+- Zunächst muss der Arduino mit dem Raspberry Pi per USB-A Kabel verbunden werden. Dieser erhält die Stromversorgung über die USB-Schnittstelle.
+
 - Download der <a href="https://github.com/FastLED/FastLED" target="_blank">FastLED-Library</a> zur Steuerung des LED-Strips
 
 - Installation der Arduino IDE 
@@ -231,11 +234,15 @@ Alternativ kann die Einrichtung direkt auf dem Pi vorgenommen werden.
 - Unter `Werkzeuge -> Port` muss der passende Port ausgewählt sein (meist /dev/ttyACM0 unter Linux)
 - Hochladen auswählen
 
-Die Installation der IDE kann entweder auf einem externen PC erfolgen, in dem der Arduino per USB verbunden wird oder direkt auf dem Raspberry Pi (ebenfalls über Verbindung mit USB).
+Alternativ kann die Installation der IDE auch auf einem externen PC erfolgen, in dem der Arduino per USB verbunden wird. 
+Der Arduino muss anschließend wie beschrieben mit dem Raspberry Pi verbunden werden.
+
 ### Hardware
-```
-TODO: Hier soll das Bild hin z.B.
-```
+
+Aufbau der Komponenten
+<img src="images\Mood_FH_Fritzing.jpg" width="500">
+
+
 >TODO: durch neue Kabelage evtl. überarbeiten
 - Arduino Pin 13 an CI (Steueruhrdatensignaleingang bzw. Clock) des LED-Strip (Grün)
 - Arduino Pin 11 an DI (Steuerdatensignaleingang bzw. Data) des LED-Strip (Blau)
