@@ -9,9 +9,15 @@ pygame_playlists:
 
   angry:
   - "Simon Panrucker - Angry Dance.mp3"
+  - "Bullet For My Valentine - Knives.mp3"
   disgusted:
+  - "Helene Fischer - Atemlos durch die Nacht.mp3"
+  - "Vincent Gross - Ich schenk Dir mein Herz.mp3"
   
   fearful:
+  - "Charlie Clouser - Hello Zepp + Overture.mp3"
+  - "DJ Haunted - Dark Ambient Music.mp3"
+  - "Gold Rush Studio Orchestra - Jaws (Main Movie Theme).mp3"
   
   happy:
   - "Ketsa - Good Vibe.mp3"
@@ -21,6 +27,8 @@ pygame_playlists:
   - "Mark Ronson - Uptown Funk (feat. Bruno Mars).mp3"
   - "Pharrell Williams - Happy - From 'Despicable Me 2'.mp3"
   neutral:
+  - "Bohoman - Elevator Music.mp3"
+  - "Neeraj Make - Elevator Music.mp3"
   
   sad:
   - "A Great Big World, Christina Aguilera - Say Something.mp3"
@@ -29,6 +37,8 @@ pygame_playlists:
   - "Tate McRae - you broke me first.mp3"
   - "Valera - Everything.mp3"
   surprised:
+  - "Kool & The Gang - Celebration.mp3"
+  - "Los Del Rio - Macarena.mp3"
 
 #Die Playlists, welche bei der jew. Emotion abgespielt werden sollen.
 #Muessen in dem Format "<Playlistname> (by <Profilname>)" angegeben werden
