@@ -5,6 +5,14 @@
 - Alina von der Heide (minf103647) 5. Fachsemester
 - Annalisa Anzioso (minf103575) 5. Fachsemester
 
+## Impressionen
+
+![GIF](final/images/usage_gif.gif)
+
+![Usage](final/images/usage.jpg)
+
+![Innenleben](final/images/inside.jpg)
+
 ## Anforderungen (zu Beginn des Projekts)
 
 ### Gesichtserkennung
@@ -21,11 +29,3 @@ Zusätzlich wäre denkbar diese Songs über eine Python API aus Spotify Playlist
 ### Licht
 
 Das Licht wird an die erkannte Stimmung angepasst. Jede Stimmung bekommt dabei eine Farbe zugeordnet. Eine Erweiterung wären dann unterschiedliche Lichtprogramme, welche je nach erkannter Emotion eine passende Stimmung im Raum verbreiten sollen.
-
-### Webserver [optional]
-
-Bei genügend Zeit könnte das PI noch mit einem Webserver verbunden werden. Über diesen werden dann Bilder an das PI gesendet, in denen dann Emotionen erkannt werden können.
-Dabei könnte der Ablauf folgendermaßen aussehen:
--Nimmt ein Bild, welches hochgeladen wird entgegen
--Speichert es lokal auf dem PI
--Übergibt es an das Gesichtserkennungs-Skript, welches darauf ein Gesicht sucht und (falls vorhanden) versucht eine Emotion zu erkennen
