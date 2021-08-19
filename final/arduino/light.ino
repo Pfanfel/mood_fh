@@ -39,7 +39,12 @@ CRGB leds[NUM_LEDS];
 /**
  * Angabe, ob Animatation angezeigt werden soll
  */
-static uint8_t animationOn = 0;
+static bool animationOn = false;
+
+/**
+ * Angabe, ob ANimation gewechselt wurde
+ */
+static bool switched = false;
 
 static uint16_t frame = 0;
 
@@ -78,6 +83,17 @@ CRGBPalette16 disgustedPal = Sunset_gp;
  * Farbpalette fuer die Animation von Angry
  */
 CRGBPalette16 angryPal = Angry_gp;
+
+/**
+ * Wartet solange, bis die Zeit abgelaufen ist, oder die Animation beendet wird
+ */
+static void wait(uint8_t currDelay){
+  static long currentMillis;
+  while ((millis() - currentMillis >= currDelay) && (!switched)) {
+    currentMillis = millis();
+  }
+  switched = false;
+}
 
 /*----------------------------Animation und Farbangaben---------------------------------*/
 
@@ -151,7 +167,7 @@ static void drawComet() {
       leds[j] = leds[j].fadeToBlackBy(FADE_AMOUNT);
     }
   }
-  delay(20);
+  wait(20);
 }
 
 /**
@@ -184,7 +200,7 @@ static void drawTwinkles(CHSV color, uint8_t d, uint8_t fadeAmount) {
   uint8_t pos = random16(NUM_LEDS);
   /* Farbwert der LED an der ermittelten Position setzen */
   leds[pos] += color;
-  delay(d);
+  wait(d);
 }
 
 /**
@@ -309,7 +325,7 @@ static void drawRipple() {
         leds[wrap(center - step + counter)] = CHSV(COLOR, 0, pow(FADE_AMOUNT, step - (counter - 1))*255); 
         counter += 2;  
         index--;  
-        delay(10);  
+        wait(10);  
       }
       step++;
     } 
@@ -371,11 +387,12 @@ void loop() {
 
   /* Pruefen, ob die Animation ausgeschaltet wurde */
   if (temp == 'F') {
-    animationOn = 0;
+    animationOn = false;
+    switched = true;
   }
   /* Pruefen, ob die Animation angeschaltet wurde */
   else if (temp == 'T') {
-    animationOn = 1;
+    animationOn = true;
   }
   /* Umwandeln des gelesenen Zeichens in eine Zahl */
   else {
@@ -385,6 +402,7 @@ void loop() {
   /* Pruefen, ob die gespeicherte Zahl einer Emotion entspricht */
   if ((emotion != temp) && (temp >= 0) && (temp < 8)) {
     emotion = (Emotion) temp;
+    switched = true;
   }
 
   /* Je nach Emotion, Farbe oder Animation der LEDs anpassen */
