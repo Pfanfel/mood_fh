@@ -1,3 +1,22 @@
+# Medieninformatik-Projekt Wintersemester 20/21
+Michael Smirnov (minf103430) 6. Fachsemester
+Len Harmsen (minf103760) 5. Fachsemester
+Alina von der Heide (minf103647) 5. Fachsemester
+Annalisa Anzioso (minf103575) 5. Fachsemester
+
+# Projektbeschreibung
+Auf einem Raspberry Pi läuft ein Programm, welches zunächst mit Hilfe einer Kamera die Emotion einer Person ermitteln kann. 
+Dabei wird auf einem Bildschirm angezeigt, was die Kamera aktuell erfasst. 
+
+Das Programm kann über eine Fernbedienung gesteuert werden, welche über einem Empfänger mit dem Pi verbunden ist und die Signale durch den Pi verarbeitet.
+
+Nachdem eine Emotion erkannt wurde, wird diese einem Arduino Uno "übergeben", welcher die LEDs eines gekoppelten LED-Strips farblich anpasst. 
+Zusätzlich ist es möglich über angeschlossene Lautsprecher ein zur Emotion passendes Lied abzuspielen. 
+Diese Lieder werden entweder aus einer lokalen Sammlung oder aus einer hinterlegten Spotify-Playlist ausgewählt. 
+
+Die Fernbedienung stellt verschiedene Tasten bereit, wie z.B. das Pausieren das Programms oder die Veränderung der Lautstärke.
+Außerdem gibt es die Möglichkeit, statt einzelne Farben für die jeweilige Emotion, auch Animationen anzuzeigen. 
+
 # Installationsanleitung
 
 ## Benötigte Komponenten
