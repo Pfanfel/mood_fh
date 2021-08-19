@@ -20,13 +20,12 @@
 ---
 - Lautsprecher/Boxen
     - Kabelgebunden
-        - Stromversorgung per USB Pinheader Buchse am Netzteil
         - Audioanschluss über AUX am Raspberry Pi
     - 5V, 3.2A, 16W
 ---
 - Netzteil
     - aktuelles Setup: 5V, 10A
-    - **Anmerkung:** Benötigte Stromstärke beträgt mehr als 10A
+    - **Anmerkung:** Benötigte Stromstärke beträgt mehr als 10A (Lautsprecher besitzen eine externe Stromversorgung)
         - Empfehlung: Netzteil mit 15A, damit Lautsprecher kein extra Netzteil benötigen
 ---
 - Terminal Block Adapter
@@ -49,9 +48,27 @@
 ---
 - Leistungsangaben
     - 5V, 11.7165A, 58.6W
-    - >TODO: Gemessen: ...
 
-## Pi aufsetzen und Grundeinrichtung vornehmen
+## Installation der Hardware 
+
+<img src="images\Mood_FH_Fritzing.jpg" width="500">
+
+- Arduino und LED-Strip:
+    - Arduino Pin 13 an CI (Steueruhrdatensignaleingang bzw. Clock) des LED-Strip (Grün)
+    - Arduino Pin 11 an DI (Steuerdatensignaleingang bzw. Data) des LED-Strip (Blau)
+    - Stromversorgung des Arduino per USB-Schnittstelle des Raspberry Pi
+    - Ground vom Arduino zum Netzteil (Terminal Block Adapter) (Schwarz)
+    - Ground vom LED-Strip zum Netzteil (Schwarz)
+    - 5V vom LED-Strip zum Netzteil (Rot)
+
+- Raspberry Pi und Infrarot-Empfänger:
+    - Ground (Pin 6) zum Netzteil (Schwarz)
+    - 5V (Pin 2) zum Netzteil (Rot)
+    - Ground (Pin 14) vom Pi zum Empfänger (Blau)
+    - 5V (Pin 4) vom Pi zum Empfänger (Grün)
+    - GPIO18 (Pin 12) vom Pi zum Empfänger (Lila)
+
+## 1. Pi aufsetzen und Grundeinrichtung vornehmen
 
 1. Herunterladen und erstellen des <a href="https://www.raspberrypi.org/software/" target="_blank">Images</a>.
 
@@ -114,7 +131,7 @@ Alternativ kann die Einrichtung direkt auf dem Pi vorgenommen werden.
     ```
 	<enviroment_name> $ pip install -r requirements.txt
 	```
-## Installation des Sound-Moduls und OpenCV
+## 2. Installation des Sound-Moduls und OpenCV
   - Skript ausführbar machen
     ```
     $ chmod +x setup.sh
@@ -175,7 +192,7 @@ Alternativ kann die Einrichtung direkt auf dem Pi vorgenommen werden.
         $ sudo mopidyctl config
         ```
 
-8. Den Audio-Output für den Mopidy-User ändern, da dieser im Defaultfall Ton über HDMI und nicht über Klinke abspielt.
+8. Den Audio-Output für den Mopidy-User ändern, da dieser im Default-Fall Ton über HDMI und nicht über Klinke abspielt.
     - Default auf den Kopfhörereingang <a href="https://www.alsa-project.org/wiki/Setting_the_default_device" target="_blank">setzen</a>
     - Da diese Datei momentan von Raspbian noch beim rebooten gelöscht wird (siehe <a href="https://www.raspberrypi.org/forums/viewtopic.php?t=295008" target="_blank">hier</a>), muss diese auf immutable gesetzt werden.
         ```
@@ -195,7 +212,7 @@ Alternativ kann die Einrichtung direkt auf dem Pi vorgenommen werden.
         $ sudo reboot
         ```
 
-## Webcam-Emotion-Detection
+## 3. Webcam-Emotion-Detection
 
 1. Folgende Zeile in _/boot/config.txt_ ändern oder anhängen:
     ```
@@ -215,7 +232,7 @@ Alternativ kann die Einrichtung direkt auf dem Pi vorgenommen werden.
     @reboot sudo ir-keytable -p nec
     @reboot sudo ir-keytable -c -w /etc/init.d/key.conf
     ```
-## Einrichtung des Lichtmoduls
+## 4. Einrichtung des Lichtmoduls
 
 ### Einrichtung des Arduino
 
@@ -226,7 +243,7 @@ Alternativ kann die Einrichtung direkt auf dem Pi vorgenommen werden.
 - Installation der Arduino IDE 
     - <a href="https://www.arduino.cc/en/guide/windows" target="_blank">Installation unter Windows</a>
     - <a href="https://www.arduino.cc/en/Guide/Linux" target="_blank">Installation unter Linux</a>
-- _light.ino_ aus dem "arduino"-Verzeichnis mit der Arduino IDE öffnen
+- _light.ino_ aus dem "light"-Verzeichnis mit der Arduino IDE öffnen
 - Einbinden der Bibliothek:
     - `Sketch -> Bibliothek einbinden -> .ZIP Bibliothek hinzufügen`
 
@@ -236,30 +253,9 @@ Alternativ kann die Einrichtung direkt auf dem Pi vorgenommen werden.
 
 Alternativ kann die Installation der IDE auch auf einem externen PC erfolgen, in dem der Arduino per USB verbunden wird. 
 Der Arduino muss anschließend wie beschrieben mit dem Raspberry Pi verbunden werden.
+	
 
-### Hardware
-
-Aufbau der Komponenten
-<img src="images\Mood_FH_Fritzing.jpg" width="500">
-
-
->TODO: durch neue Kabelage evtl. überarbeiten
-- Arduino Pin 13 an CI (Steueruhrdatensignaleingang bzw. Clock) des LED-Strip (Grün)
-- Arduino Pin 11 an DI (Steuerdatensignaleingang bzw. Data) des LED-Strip (Blau)
-- 5V Versorgung des Arduino per USB-Schnittstelle des Raspberry Pi
-- Ground vom Arduino zum Netzteil
-- von Pi:
-    - Ground (Pin 6) zum Netzteil (Weiß)
-    - 5V (Pin 2) zum Netzteil (Rot)
-- vom LED-Strip
-    - Ground zum Netzteil (Weiß oder Schwarz)
-    - 5V zum Netzteil (Rot)
-
-### Installation
-
-> Wichtig: Kontrollieren, ob ACM stimmt (auf Pi Seite)
-
-## [Optional] Einrichten eins Systemd-Services, um das Programm on Boot im Hintergrund starten zu lassen.
+## [Optional] Einrichten eines Systemd-Services, um das Programm on Boot im Hintergrund starten zu lassen.
 Dieses <a href="https://github.com/torfsen/python-systemd-tutorial" target="_blank">Tutorial</a> wurde bei dem Projekt verwendet.
 1. Erstellen einer _servicename.service_-Datei in _~/.config/systemd/user/_, sodass Pfad = _~/.config/systemd/user/servicename.service_ ist.
 2. Folgenden Inhalt in die Datei einfügen:
