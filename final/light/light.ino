@@ -85,6 +85,11 @@ CRGBPalette16 disgustedPal = Sunset_gp;
 CRGBPalette16 angryPal = Angry_gp;
 
 /**
+ * Farbpalette fuer die Animation von Fearful
+ */
+CRGBPalette16 fearfulPal = ForestColors_p;
+
+/**
  * Wartet solange, bis die Zeit abgelaufen ist, oder die Animation beendet wird
  */
 static void wait(uint8_t currDelay){
@@ -274,13 +279,14 @@ static void illuminateDisgusted() {
   FastLED.show();
 }
 
+
 /**
  * Sorgt dafuer, dass die angegebene Schrittgroesse den Wertebereich nicht verlaesst
  * 
  * @param step Schrittgroesse die den Wertebereich nicht verlassen soll
  * @return geclampte neue Schrittgroesse
  */
-static uint8_t wrap(uint8_t step) {
+/*static uint8_t wrap(uint8_t step) {
   uint8_t newStep = step;
   if (newStep < 0) {
     newStep = NUM_LEDS + step;
@@ -289,22 +295,22 @@ static uint8_t wrap(uint8_t step) {
     newStep = step - NUM_LEDS;
   }
   return newStep;
-}
+}*/
 
 /**
  * Animiert die LEDs mit einer Hintergrundfarbe und zufaellig bewegten LEDs.
  */
-static void drawRipple() {
+/* static void drawRipple() {
   static const uint8_t COLOR = 205;
   static const uint8_t MAX_STEPS = 16;
   static const float FADE_AMOUNT = 0.8;
   static uint8_t center = 0;
   static uint8_t step = 0;
 
-  /* Hintergrundfarbe der LEDs setzen */
+  // Hintergrundfarbe der LEDs setzen 
   fill_solid(leds, NUM_LEDS, CHSV(110, 255, 100));   
 
-  /* Neuen zufaelligen Startpunkt fuer die andersfarbigen LEDs ermitteln */
+  // Neuen zufaelligen Startpunkt fuer die andersfarbigen LEDs ermitteln 
   if (step == 0) {
     center = random(NUM_LEDS);
     leds[center] = CHSV(COLOR, 255, 255); 
@@ -313,12 +319,12 @@ static void drawRipple() {
   
   else {
     
-    /* Wenn die bewegten LEDs noch nicht maximale Entfernung zum Startpunkt erreicht haben */
+    // Wenn die bewegten LEDs noch nicht maximale Entfernung zum Startpunkt erreicht haben 
     if (step < MAX_STEPS) {
       uint8_t counter = 1;
       uint8_t index = step;
 
-      /* Farbwert der bewegten LEDs ermitteln */
+      // Farbwert der bewegten LEDs ermitteln 
       while (index > 0) {
         leds[wrap(center + step - counter)] = CHSV(COLOR, 0, pow(FADE_AMOUNT, step - (counter - 1))*255);     
         leds[wrap(center - step + counter)] = CHSV(COLOR, 0, pow(FADE_AMOUNT, step - (counter - 1))*255); 
@@ -333,7 +339,33 @@ static void drawRipple() {
       step = 0;
     }
   }
-}
+} */
+
+/**
+ * Animiert die LEDs mit einer Hintergrundfarbe und zufaellig bewegten LEDs.
+ */
+static void drawBeatWave() {
+  uint8_t outer = beatsin8(30, 0, NUM_LEDS-1);
+  uint8_t outer1 = beatsin8(40, 0, NUM_LEDS-1);
+  uint8_t outer2 = beatsin8(50, 0, NUM_LEDS-1);
+  uint8_t outer3 = beatsin8(60, 0, NUM_LEDS-1);
+  uint8_t outer4 = beatsin8(70, 0, NUM_LEDS-1);
+     
+  uint8_t wave1 = beatsin8(9, 0, 255);
+
+  for (int i = 0; i < NUM_LEDS; i++) {
+    leds[i] = ColorFromPalette(fearfulPal, i+wave1, 255, LINEARBLEND); 
+  }
+  
+  leds[outer] = CRGB::Aqua;
+  leds[outer1] = CRGB::Aqua;
+  leds[outer2] = CRGB::Aqua;
+  leds[outer3] = CRGB::Aqua;
+  leds[outer4] = CRGB::Aqua;
+  
+  nscale8(leds, NUM_LEDS, 200); 
+} 
+
 
 /**
  * Setzt die LEDs auf die angebenen Animation/Farbwerte fuer die Emotion Fearful
@@ -341,7 +373,8 @@ static void drawRipple() {
 static void illuminateFearful() {
   /* Pruefen, ob die LEDs animiert werden sollen */
   if (animationOn) {
-    drawRipple(); 
+    //drawRipple(); 
+    drawBeatWave();
   }
   else {
     /* LEDs auf angegebenen Farbwert setzen */
