@@ -258,3 +258,58 @@ Aufbau der Komponenten
 ### Installation
 
 > Wichtig: Kontrollieren, ob ACM stimmt (auf Pi Seite)
+
+## [Optional] Einrichten eins Systemd-Services, um das Programm on Boot im Hintergrund starten zu lassen.
+Dieses <a href="https://github.com/torfsen/python-systemd-tutorial" target="_blank">Tutorial</a> wurde bei dem Projekt verwendet.
+1. Erstellen einer _servicename.service_-Datei in _~/.config/systemd/user/_, sodass Pfad = _~/.config/systemd/user/servicename.service_ ist.
+2. Folgenden Inhalt in die Datei einfügen:
+    ```
+    [Unit]
+    Description=Description of the service
+
+    [Service]
+    # Command to execute when the service is started
+    ExecStart=/usr/bin/python path/to/your/main.py
+    Restart=on-failure
+
+    [Install]
+    # Command to start the service on boot
+    WantedBy=default.target
+    ```
+Nun wird Systemd den Service finden.
+1. Finden des Services:
+    ```
+    $ systemctl --user list-unit-files | grep servicename
+    ```
+2. Starten des Services:
+    ```
+    $ systemctl --user start servicename
+    ```
+    Eventuell muss vorher der _user-daemon_ neu geladen werden.
+    ```
+    $ systemctl --user daemon-reload
+    ```
+3. Um zu prüfen, ob der Service läuft:
+    ```
+    $ systemctl --user status servicename
+    ```
+4. Stoppen des Services:
+    ```
+    $ systemctl --user stop servicename
+    ```
+5. Aktivieren des Services, um ihn beim Booten automatisch zu starten:
+    ```
+    $ systemctl --user enable servicename
+    ```
+6. Um Autostart zu deaktivieren:
+    ```
+    $ systemctl --user disable servicename
+    ```
+7. Um zu prüfen, ob der Service aktiviert ist:
+    ```
+    $ systemctl --user list-unit-files | grep servicename
+    ```
+
+## Known Bugs.
+1. Beim Starten des PI's muss einmal die Emotionserkennung gestartet werden, sodass das Programm abstürzt und neu startet. Dies hängt eventuell mit OpenCV zusammen. Allerdings wurde hier keine Lösung gefunden.
+2. Wenn Emotionen mit gleicher Häufigkeit erkannt werden stürzt das Programm ab.
