@@ -44,7 +44,7 @@ static bool animationOn = false;
 /**
  * Angabe, ob ANimation gewechselt wurde
  */
-static bool switched = false;
+static volatile bool switched = false;
 
 static uint16_t frame = 0;
 
@@ -88,9 +88,8 @@ CRGBPalette16 angryPal = Angry_gp;
  * Wartet solange, bis die Zeit abgelaufen ist, oder die Animation beendet wird
  */
 static void wait(uint8_t currDelay){
-  static long currentMillis;
-  while ((millis() - currentMillis >= currDelay) && (!switched)) {
-    currentMillis = millis();
+  unsigned long startMillis = millis();
+  while ((millis() - startMillis < currDelay) && (!switched)) {
   }
   switched = false;
 }
@@ -342,7 +341,7 @@ static void drawRipple() {
 static void illuminateFearful() {
   /* Pruefen, ob die LEDs animiert werden sollen */
   if (animationOn) {
-    drawRipple();
+    drawRipple(); 
   }
   else {
     /* LEDs auf angegebenen Farbwert setzen */

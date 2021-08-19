@@ -18,7 +18,7 @@ class EmotionDetection:
     PATH_TO_SOURCE = os.path.abspath(os.path.dirname( __file__ ))
     PATH_TO_MODEL = os.path.join(PATH_TO_SOURCE, "model.h5")
     PATH_TO_HAARCASCADE = os.path.join(PATH_TO_SOURCE, "haarcascade_frontalface_default.xml")
-    QUEUE_SIZE = 20
+    QUEUE_SIZE = 21
 
     def __init__(self):
         '''
