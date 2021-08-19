@@ -1,8 +1,8 @@
 # Medieninformatik-Projekt Wintersemester 20/21
-Michael Smirnov (minf103430) 6. Fachsemester
-Len Harmsen (minf103760) 5. Fachsemester
-Alina von der Heide (minf103647) 5. Fachsemester
-Annalisa Anzioso (minf103575) 5. Fachsemester
+- Michael Smirnov (minf103430) 6. Fachsemester
+- Len Harmsen (minf103760) 5. Fachsemester
+- Alina von der Heide (minf103647) 5. Fachsemester
+- Annalisa Anzioso (minf103575) 5. Fachsemester
 
 # Projektbeschreibung
 Auf einem Raspberry Pi läuft ein Programm, welches zunächst mit Hilfe einer Kamera die Emotion einer Person ermitteln kann. 
