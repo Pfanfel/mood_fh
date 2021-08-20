@@ -10,14 +10,22 @@ pygame_playlists:
   angry:
   - "Simon Panrucker - Angry Dance.mp3"
   - "Bullet For My Valentine - Knives.mp3"
+  - "Angerfist - Knock Knock.mp3"
+  - "Radical Redemption - Brutal 5.0.mp3"
+  - "Radical Redemption Miss K8 - Scream.mp3"
+
   disgusted:
   - "Helene Fischer - Atemlos durch die Nacht.mp3"
   - "Vincent Gross - Ich schenk Dir mein Herz.mp3"
+  - "September - Cry For You.mp3"
+  - "VITALIC - Poison Lips.mp3"
   
   fearful:
   - "Charlie Clouser - Hello Zepp + Overture.mp3"
   - "DJ Haunted - Dark Ambient Music.mp3"
   - "Gold Rush Studio Orchestra - Jaws (Main Movie Theme).mp3"
+  - "Night Lovell - LETHAL PRESENCE.mp3"
+  - "Recondite - Warg.mp3"
   
   happy:
   - "Ketsa - Good Vibe.mp3"
@@ -26,9 +34,13 @@ pygame_playlists:
   - "Jendrik - I Don't Feel Hate.mp3"
   - "Mark Ronson - Uptown Funk (feat. Bruno Mars).mp3"
   - "Pharrell Williams - Happy - From 'Despicable Me 2'.mp3"
+  - "Levenkhan - Feliz Navidad.mp3"
+
   neutral:
   - "Bohoman - Elevator Music.mp3"
   - "Neeraj Make - Elevator Music.mp3"
+  - "Kavinsky - Nightcall.mp3"
+  - "RÜFÜS DU SOL - Innerbloom.mp3"
   
   sad:
   - "A Great Big World, Christina Aguilera - Say Something.mp3"
@@ -36,9 +48,15 @@ pygame_playlists:
   - "Maggie Rogers - Past Life.mp3"
   - "Tate McRae - you broke me first.mp3"
   - "Valera - Everything.mp3"
+  - "Trippie Redd - Wish.mp3"
+
   surprised:
   - "Kool & The Gang - Celebration.mp3"
   - "Los Del Rio - Macarena.mp3"
+  - "B.B.E - 7 Days And One Week.mp3"
+  - "Soulpride - The Flute Tune.mp3"
+  - "TheFatRat - Windfall.mp3"
+  - "Молчат Дома - Судно.mp3"
 
 #Die Playlists, welche bei der jew. Emotion abgespielt werden sollen.
 #Muessen in dem Format "<Playlistname> (by <Profilname>)" angegeben werden
