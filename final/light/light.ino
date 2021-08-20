@@ -279,68 +279,6 @@ static void illuminateDisgusted() {
   FastLED.show();
 }
 
-
-/**
- * Sorgt dafuer, dass die angegebene Schrittgroesse den Wertebereich nicht verlaesst
- * 
- * @param step Schrittgroesse die den Wertebereich nicht verlassen soll
- * @return geclampte neue Schrittgroesse
- */
-/*static uint8_t wrap(uint8_t step) {
-  uint8_t newStep = step;
-  if (newStep < 0) {
-    newStep = NUM_LEDS + step;
-  }
-  if (newStep > NUM_LEDS - 1) {
-    newStep = step - NUM_LEDS;
-  }
-  return newStep;
-}*/
-
-/**
- * Animiert die LEDs mit einer Hintergrundfarbe und zufaellig bewegten LEDs.
- */
-/* static void drawRipple() {
-  static const uint8_t COLOR = 205;
-  static const uint8_t MAX_STEPS = 16;
-  static const float FADE_AMOUNT = 0.8;
-  static uint8_t center = 0;
-  static uint8_t step = 0;
-
-  // Hintergrundfarbe der LEDs setzen 
-  fill_solid(leds, NUM_LEDS, CHSV(110, 255, 100));   
-
-  // Neuen zufaelligen Startpunkt fuer die andersfarbigen LEDs ermitteln 
-  if (step == 0) {
-    center = random(NUM_LEDS);
-    leds[center] = CHSV(COLOR, 255, 255); 
-    step++;
-  } 
-  
-  else {
-    
-    // Wenn die bewegten LEDs noch nicht maximale Entfernung zum Startpunkt erreicht haben 
-    if (step < MAX_STEPS) {
-      uint8_t counter = 1;
-      uint8_t index = step;
-
-      // Farbwert der bewegten LEDs ermitteln 
-      while (index > 0) {
-        leds[wrap(center + step - counter)] = CHSV(COLOR, 0, pow(FADE_AMOUNT, step - (counter - 1))*255);     
-        leds[wrap(center - step + counter)] = CHSV(COLOR, 0, pow(FADE_AMOUNT, step - (counter - 1))*255); 
-        counter += 2;  
-        index--;  
-        wait(10);  
-      }
-      step++;
-    } 
-    
-    else {
-      step = 0;
-    }
-  }
-} */
-
 /**
  * Animiert die LEDs mit einer Hintergrundfarbe und zufaellig bewegten LEDs.
  */
@@ -373,7 +311,6 @@ static void drawBeatWave() {
 static void illuminateFearful() {
   /* Pruefen, ob die LEDs animiert werden sollen */
   if (animationOn) {
-    //drawRipple(); 
     drawBeatWave();
   }
   else {
