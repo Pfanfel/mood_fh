@@ -284,7 +284,7 @@ Dieses <a href="https://github.com/torfsen/python-systemd-tutorial" target="_bla
 
     [Service]
     # Command to execute when the service is started
-    ExecStart=/usr/bin/python path/to/your/main.py
+    ExecStart=/path/to/the/script/main.py
     Restart=on-failure
 
     [Install]
