@@ -90,4 +90,5 @@ class EmotionDetection:
             # + 1, da im Emotionsenum die 0 = None ist.
             returnvalue = self.ring.getMode() + 1
             return returnvalue
-        return None
+        # Bei Fehlverhalten default = neutral
+        return 5
